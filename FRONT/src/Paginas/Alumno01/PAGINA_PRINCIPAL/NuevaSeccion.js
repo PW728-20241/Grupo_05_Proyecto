@@ -1,0 +1,57 @@
+import React from 'react';
+import { Box, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/system';
+import Link from '@mui/material/Link';
+import PropTypes from 'prop-types';
+
+const Subrayado = styled(Link)(({ theme }) => ({
+  fontFamily: 'Arial, sans-serif',
+  color: '#000000',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}));
+
+function NuevaSeccion(props) {
+  const { nuevos } = props;
+
+  return (
+    <Box id="nuevos" mt={4} mb={2}>
+      <Typography variant="h6" gutterBottom>Nuevos</Typography>
+      <Grid container spacing={2}>
+        {nuevos.map((newItem, index) => (
+          <Grid item xs={12} sm={6} md={6} key={index}>
+            <Box
+              width="100%"
+              height={200}
+              sx={{
+                backgroundImage: `url(${newItem.imageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: 5,
+              }}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mb={2}
+            ></Box>
+            <Typography variant='h6'>{newItem.title}</Typography>
+            <Subrayado href="#">Learn More</Subrayado>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
+
+NuevaSeccion.propTypes = {
+  nuevos: PropTypes.arrayOf(
+    PropTypes.shape({
+      imageUrl: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
+export default NuevaSeccion;
