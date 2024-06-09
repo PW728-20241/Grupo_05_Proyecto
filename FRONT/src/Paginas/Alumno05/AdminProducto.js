@@ -9,7 +9,7 @@ const AdminProducto = () => {
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    async function fetchData(query = "") {
+    async function buscraProducto(query = "") {
         const URL_base = "http://localhost:3100/productos";
         const url = query ? `${URL_base}-url?id=${query}&nombre=${query}&editor=${query}&estado=${query}` : URL_base;
         
@@ -27,11 +27,11 @@ const AdminProducto = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        buscraProducto();
     }, []);
 
     const handleSearch = () => {
-        fetchData(searchQuery);
+        buscraProducto(searchQuery);
     };
 
     return (
