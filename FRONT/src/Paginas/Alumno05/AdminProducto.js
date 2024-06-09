@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Container, CssBaseline, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, Pagination } from '@mui/material';
+import { Box, Button, Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, Pagination } from '@mui/material';
 import Header from '../../Componentes/Header2';
 import Footer from '../../Componentes/Footer';
 import BarLateral from '../../Componentes/BarraLateral2';
 import ContenidoTabla from './ContenidoTablaProd';
+
 const AdminProducto = () => {
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    async function buscarProducto(query = "") {
+    async function fetchData(query = "") {
         const URL_base = "http://localhost:3100/productos";
-        const url = query ? `${URL_base}-url?id=${query}&detalle=${query}&serie=${query}&estado=${query}` : URL_base;
+        const url = query ? `${URL_base}-url?id=${query}&nombre=${query}&editor=${query}&estado=${query}` : URL_base;
         
         try {
-            const respuesta = await fetch(url);
-            if (respuesta.status === 200) {
-                const data = await respuesta.json();
+            const res = await fetch(url);
+            if (res.status === 200) {
+                const data = await res.json();
                 setData(data);
             } else {
                 alert("Producto no existe");
             }
         } catch (error) {
-            console.error('Error al obtener los datos', error);
+            console.error('Error fetching data:', error);
         }
     }
 
     useEffect(() => {
-        buscarProducto();
+        fetchData();
     }, []);
 
     const handleSearch = () => {
-        buscarProducto(searchQuery);
+        fetchData(searchQuery);
     };
 
     return (
@@ -46,7 +47,7 @@ const AdminProducto = () => {
                             Agregar Producto
                         </Button>
                     </Box>
-                    <TextField id="buscarP" label="Buscar por ID, Detalle, Serie o Estado" variant="outlined" fullWidth sx={{ mb: 2 }} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                    <TextField id="buscarP" label="Buscar por ID, Nombre, Editor o Estado" variant="outlined" fullWidth sx={{ mb: 2 }} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                         InputProps={{
                             endAdornment: (
                                 <Button type="button" onClick={handleSearch} variant="contained" component="label" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
@@ -60,8 +61,8 @@ const AdminProducto = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{ textAlign: 'center' }}>ID</TableCell>
-                                    <TableCell style={{ textAlign: 'center' }}>Detalle</TableCell>
-                                    <TableCell style={{ textAlign: 'center' }}>Serie</TableCell>
+                                    <TableCell style={{ textAlign: 'center' }}>Nombre</TableCell>
+                                    <TableCell style={{ textAlign: 'center' }}>Editor</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Precio</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Fecha de Registro</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Stock</TableCell>
@@ -70,8 +71,8 @@ const AdminProducto = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.length > 0 ? data.map((item, index) => (
-                                    <ContenidoTabla key={index}/>
+                                {data.length > 0 ? data.map((producto, index) => (
+                                    <ContenidoTabla key={index} producto={producto}/>
                                 )) : (
                                     <TableRow>
                                         <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>

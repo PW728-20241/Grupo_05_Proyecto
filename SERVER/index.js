@@ -1,23 +1,20 @@
 import express from "express";
 import cors from "cors";
-import { es_MX,es,Faker } from "@faker-js/faker";
+import {Faker,es,es_MX} from '@faker-js/faker';
+
 const app = express();
 const port = 3100;
 
 app.use(cors());
 
-export const faker= new Faker(
-    {locale:[es_MX,es]}
-);
-
 app.use(express.json());
 
-function crearProductos(id,detalle,serie,precio, fechaRegistro,stock)
+function crearProductos(id,nombre,editor,precio, fechaRegistro,stock)
 {
     return{
         id:id,
-        detalle:detalle,
-        serie:serie,
+        nombre:nombre,
+        editor:editor,
         precio:precio,
         fechaRegistro:fechaRegistro,
         stock:stock,
@@ -25,27 +22,28 @@ function crearProductos(id,detalle,serie,precio, fechaRegistro,stock)
     }
 }
 
+export const faker = new Faker(
+    {locale: [es_MX,es]}
+);
+
 const productos=[
-    crearProductos(1,'Manga Dragon Ball Vol 1','Dragon Ball', 'S/ 39.99','11/02/2024',35),
-    crearProductos(2,'Manga Sailor Moon Vol 1','Sailor Moon', 'S/ 39.99','11/02/2024',50),
-    crearProductos(3,'Loki Funko Pop','Marvel', 'S/ 39.99','11/02/2024',100),
-    crearProductos(4,'Manga Dragon Ball Vol 2','Dragon Ball', 'S/ 39.99','11/02/2024',86)
+    crearProductos(1,'EA SPORTS FC™ 24','Electronic Arts', 259.00,'08/06/2024',120),
+    crearProductos(2,'God of War','PlayStation Publishing LLC', 159.00,'08/06/2024',85),
+    crearProductos(3,'Grand Theft Auto V','Rockstar Games', 62.17,'08/06/2024',64),
+    crearProductos(4,'Mortal Kombat 1','Warner Bros. Games', 83.25,'08/06/2024',150)
 ]
-
-
-
 
 app.get("/productos-url",function(req,res)
 {
-    const {id, detalle, serie, estado}=req.query;
+    const {id, nombre, editor, estado}=req.query;
     let productoFiltrado = productos;
-    if(id || detalle || serie || estado)
+    if(id || nombre || editor || estado)
         {
             productoFiltrado = productoFiltrado.filter(pub=>{
                 return(
                     (id && pub.id == id)||
-                    (detalle && pub.detalle.toLowerCase() == detalle.toLowerCase()) ||
-                    (serie && pub.serie.toLowerCase() == serie.toLowerCase()) ||
+                    (nombre && pub.nombre.toLowerCase() == nombre.toLowerCase()) ||
+                    (editor && pub.editor.toLowerCase() == editor.toLowerCase()) ||
                     (estado && pub.estado.toLowerCase() == estado.toLowerCase())
                 );
             })
@@ -63,17 +61,13 @@ app.get("/productos",function(req,res){
     res.json(productos);
 });
 
-app.listen(port,function(){
-    console.log("Servidor escuchando en puerto "+port)
-});
-
 app.post("/productos",function(req,res)
 {
-    const data = req.body;
-    if(data&&data.detalle&&data.serie&&data.precio&&data.fechaRegistro&&data.stock)
+    const data=req.body;
+    if(data&&data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock)
     {
         const nuevoID = productos.length+1;
-        const nuevoProducto = crearProductos(nuevoID,data.detalle,data.serie,data.precio,data.fechaRegistro,data.stock);
+        const nuevoProducto = crearProductos(nuevoID,data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock);
         productos.push(nuevoProducto);
         res.json(nuevoProducto);
     }
@@ -81,7 +75,54 @@ app.post("/productos",function(req,res)
     {
         res.status(400).send("Faltan datos");
     }
-}); 
+});
+
+app.put("/productos/:id",function(req,res)
+{
+    const id=req.params.id;
+    const data= req.body;
+
+    if(data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock)
+    {
+        const producto = productos.find((pub)=>pub.id==id);
+        if(producto)
+        {
+            producto.nombre=data.nombre;
+            producto.editor=data.editor;
+            producto.precio=data.precio;
+            producto.fechaRegistro=data.fechaRegistro;
+            producto.stock=data.stock;
+            res.json(producto);
+        }
+        else
+        {
+            res.status(404).send("Producto no encontrado");
+        }
+    }
+    else
+    {
+        res.status(400).send("Faltan datos");
+    }
+});
+
+app.delete("/productos/:id",function(req,res)
+{
+    const id=req.params.id;
+    const producto=productos.find((pub)=>pub.id=id);
+    if(producto)
+    {
+        producto.estado="No activo";
+        res.json(producto);
+    }
+    else
+    {
+        res.status(404).send("Producto no encontrado");
+    }
+});
+
+app.listen(port,function(){
+    console.log("Servidor escuchando en puerto "+port)
+});
 
 /*
 -----------------------------------------------------
@@ -100,15 +141,15 @@ function crearUsuario (id,nombre,apellido,correo,fechaRegistro,estado){
     }
 };
 
-const usuarios = [
+const usuario = [
     crearUsuario(1,'Antonio','Lopez Caro','correo@sanchez.com','11/02/2022','Activo'),
     crearUsuario(2,'Ana','Bucker','correo2@sanchez.com','11/02/2022','Activo'),
     crearUsuario(3,'Gustavo','Gomez','correo3@sanchez.com','11/02/2022','Activo'),
     crearUsuario(4,'Gianluca','Ladula','correo4@sanchez.com','11/02/2022','Activo'),
 ];
 
-app.get('/usuarios/:id',function(req,res){
-    res.json(usuarios);
+app.get('/usuarios-url',function(req,res){
+
 });
 
 
