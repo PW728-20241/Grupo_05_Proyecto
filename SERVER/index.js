@@ -148,8 +148,29 @@ const usuario = [
     crearUsuario(4,'Gianluca','Ladula','correo4@sanchez.com','11/02/2022','Activo'),
 ];
 
-app.get('/usuarios-url',function(req,res){
+app.get('/usuarios',function(req,res){
+    res.json(usuario);
+});
 
+app.get('/usuarios-url',function(req,res){
+    const {correo, nombre, apellido} = req.query;
+    let usuarioFiltrado = usuario;
+    if (correo || nombre || apellido){
+        usuarioFiltrado = usuarioFiltrado.filter((pub)=>{
+            return (
+                (correo && pub.correo.toLowerCase() == correo.toLocaleLowerCase()) ||
+                (nombre && pub.nombre.toLocaleLowerCase() == nombre.toLocaleLowerCase()) ||
+                (apellido && pub.apellido.toLocaleLowerCase() == apellido.toLocaleLowerCase())
+            );
+            })
+    }
+
+    if (usuarioFiltrado.length >0){
+        res.json(usuarioFiltrado);
+    }
+    else{
+        res.status(404).send("Usuario no encontrado mi rey");
+    }
 });
 
 

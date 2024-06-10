@@ -7,13 +7,6 @@ import RellenarUsuario from "./ContenidoTablaUsuarios";
 
 const drawerWidth = 240;
 
-const usuarios = [
-  { id: 1, nombre: 'Antonio', apellido: 'Lopez Caro', correo: 'correo@sanchez.com', fechaRegistro: '11/02/2022', estado: 'Activo' },
-  { id: 12333, nombre: 'Ana', apellido: 'Sanchez', correo: 'anita123@hotmail.com', fechaRegistro: '11/02/2022', estado: 'Inactivo' },
-  { id: 12334, nombre: 'Ana', apellido: 'Sanchez', correo: 'anita123@hotmail.com', fechaRegistro: '11/02/2022', estado: 'Inactivo' },
-  { id: 2, nombre: 'Antonio', apellido: 'Lopez Caro', correo: 'correo@sanchez.com', fechaRegistro: '11/02/2022', estado: 'Activo' },
-];
-
 function ListaUsuarios() {
   const [pagina, setPagina] = useState(1);
   const [filasPorPagina, setFilasPorPagina] = useState(4);
@@ -34,7 +27,7 @@ function ListaUsuarios() {
 
   async function fetchDatos(query=""){
     const url_base = "http://localhost:3100/usuarios";
-    const url = query ? `${url_base}-url?id=${query}&correo=${query}&nombre=${query}&apellido=${query}` : url_base; 
+    const url = query ? `${url_base}-url?correo=${query}&nombre=${query}&apellido=${query}` : url_base; 
     try {
       const res = await fetch(url);
       if (res.status === 200) {
@@ -56,6 +49,8 @@ function ListaUsuarios() {
     fetchDatos(searchQuery);
   };
 /*---------------------------------------------------------------------------------------------------------------------*/
+/*INICIO DEL FRONTEND*/
+
   return (
     <>
       <Header2 />
