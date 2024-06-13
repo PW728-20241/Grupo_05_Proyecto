@@ -1,12 +1,15 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import {Faker,es,es_MX} from '@faker-js/faker';
 
 const app = express();
 const port = 3100;
 
 app.use(cors());
-
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.json());
 
 function crearProductos(id,nombre,editor,precio, fechaRegistro,stock)
@@ -141,20 +144,22 @@ function crearUsuario (id,nombre,apellido,correo,fechaRegistro,estado){
     }
 };
 
-const usuario = [
-    crearUsuario(1,'Antonio','Lopez Caro','correo@sanchez.com','11/02/2022','Activo'),
-    crearUsuario(2,'Ana','Bucker','correo2@sanchez.com','11/02/2022','Activo'),
-    crearUsuario(3,'Gustavo','Gomez','correo3@sanchez.com','11/02/2022','Activo'),
-    crearUsuario(4,'Gianluca','Ladula','correo4@sanchez.com','11/02/2022','Activo'),
+const usuarios = [
+    crearUsuario(1,'Kaoru','Mitoma','correo@ejemplo.com','11/02/2022','Activo'),
+    crearUsuario(2,'Phill','Phoden','correo2@ejemplo.com','11/02/2022','Activo'),
+    crearUsuario(3,'Gustavo','Gomez','correo3@ejemplo.com','11/02/2022','Activo'),
+    crearUsuario(4,'Gianluca','Lapadula','correo4@ejemplo.com','11/02/2022','Activo'),
 ];
 
 app.get('/usuarios',function(req,res){
-    res.json(usuario);
+    res.json(usuarios);
 });
 
+
+/*SIRVE PARA CONSULTAR A CIERTOS USUARIOS CON CIERTOS FILTROS*/
 app.get('/usuarios-url',function(req,res){
     const {correo, nombre, apellido} = req.query;
-    let usuarioFiltrado = usuario;
+    let usuarioFiltrado = usuarios;
     if (correo || nombre || apellido){
         usuarioFiltrado = usuarioFiltrado.filter((pub)=>{
             return (
@@ -173,6 +178,53 @@ app.get('/usuarios-url',function(req,res){
     }
 });
 
+/**SIRVE PARA AÑADIR A UN NUEVO USUARIO */
 
+app.post("/usuarios",function(req,res){
+    const datos = req.body;
+    if(datos && datos.nombre && datos.apellido && datos.correo && datos.fechaRegistro){
+        const nuevoId = datos.length + 1;
+        const nuevoUsuario = crearUsuario(nuevoId,datos.nombre,datos.apellido,datos.correo,datos.fechaRegistro);
+        usuarios.push(nuevoUsuario);
+        res.json(nuevoUsuario);
+    }
+    else{
+        res.status(404).send("Faltan datos");
+    }
+});
+
+app.put("/usuarios/:id",function(req,res){
+    const id = req.params.id;
+    const datos = req.body;
+
+    if(datos && datos.nombre && datos.apellido && datos.correo && datos.fechaRegistro){
+        const usuarioModificar = usuarios.find((pub)=>pub.id == id);
+        if(usuarioModificar){
+            usuarioModificar.nombre = datos.nombre;
+            usuarioModificar.apellido = datos.apellido;
+            usuarioModificar.correo = datos.correo;
+            usuarioModificar.fechaRegistro = datos.fechaRegistro;
+            res.json(usuarioModificar);
+        }
+        else{
+            res.status(404).send("Usuario no encontrado");
+        }
+    }
+    else{
+        res.status(404).send("Faltan completar datos");
+    }
+});
+
+app.delete("usuarios/:id",function(req,res){
+    const id = req.params.id;
+    const usuarioEliminar = usuarios.find((pub)=>pub.id == id);
+    if (usuarioEliminar){
+        usuarioEliminar.estado = "Inactivo";
+        res.json(usuarioEliminar);
+    }
+    else{
+        res.status(404).send("No se encontrado usuario");
+    }
+});
 
 

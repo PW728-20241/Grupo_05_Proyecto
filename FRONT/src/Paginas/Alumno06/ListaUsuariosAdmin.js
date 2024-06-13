@@ -4,6 +4,7 @@ import BarraLateral2 from '../../Componentes/BarraLateral2';
 import Header2 from '../../Componentes/Header2';
 import Footer from '../../Componentes/Footer';
 import RellenarUsuario from "./ContenidoTablaUsuarios"; 
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 
@@ -68,6 +69,7 @@ function ListaUsuarios() {
           </Box>
           <TextField
             fullWidth
+            id="buscarU"
             margin="normal"
             variant="outlined"
             placeholder="Buscar por correo, nombre o apellidos..."
@@ -97,23 +99,12 @@ function ListaUsuarios() {
                 </TableHead>
                   <TableBody>
                     {data.length > 0 ? data.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell style={{ textAlign: 'center' }}>{item.id}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>{item.nombre}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>{item.apellido}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>{item.correo}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>{item.fechaRegistro}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>{item.estado}</TableCell>
-                        <TableCell style={{ textAlign: 'center' }}>
-                        <Button variant='text' size='small' style={{ fontWeight: 'bold', color: 'black' }}>Ver</Button>
-                        <Button variant='text' size='small' style={{ fontWeight: 'bold', color: '#CC0000' }}>Desactivar</Button>
-                        </TableCell>
+                      <RellenarUsuario key={index} usuario={item}/>
+                    )) : (
+                      <TableRow>
+                        <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
                       </TableRow>
-                        )) : (
-                          <TableRow>
-                          <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
-                          </TableRow>
-                        )}
+                    )}
                 </TableBody>
               </Table>
             </TableContainer>
