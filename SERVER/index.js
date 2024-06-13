@@ -227,4 +227,34 @@ app.delete("usuarios/:id",function(req,res){
     }
 });
 
+/**SOBRE LAS ORDENES DE ACUERDO AL DETALLE DEL USUARIO */
+
+function crearOrdenes(id,usuarioId,fechaOrden,total,productos,estado){
+    return{
+        id:id,
+        usuarioId:usuarioId,
+        fechaOrden:fechaOrden,
+        total:total,
+        productos:productos,
+        estado:estado
+    }
+};
+
+const ordenes = [
+    crearOrdenes(1,1,"11/03/2024","S/125.00",13,"Pendiente"),
+    crearOrdenes(2,1,"11/04/2024","S/150.00",1,"Por Enviar"),
+    crearOrdenes(3,2,"11/05/2024","S/200.00",5,"Entregado")
+];
+
+app.get('/usuarios/:id/ordenes', function(req, res) {
+    const usuarioId = parseInt(req.params.id, 10);
+    const ordenesUsuario = ordenes.filter(item => item.usuarioId === usuarioId);
+
+    if (ordenesUsuario.length > 0) {
+        res.json(ordenesUsuario);
+    } else {
+        res.status(404).send("No se encontraron órdenes para este usuario");
+    }
+});
+
 

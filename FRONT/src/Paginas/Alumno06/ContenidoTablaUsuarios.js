@@ -1,9 +1,37 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Button, TableCell, TableRow } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function RellenarUsuario(props) {
     const { usuario } = props;
+    const navigate = useNavigate();
+
+    const handleVerClick = () => {
+        navigate(`/usuarios/${usuario.id}`);
+    };
+
+    const handleDesactivarClick = async () => 
+    {
+        try {
+            const response = await fetch(`http://localhost:3100/usuarios/${usuario.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.status === 200) {
+                alert("Este usuario ha sido desactivado");
+                window.location.reload();
+            } else {
+                alert("Error al desactivar el usuario");
+            }
+        } catch (error) {
+            console.error("Error al desactivar el usuario:", error);
+        }
+    };
+
+
     return (
         <TableRow>
             <TableCell style={{ textAlign: 'center' }}>{usuario.id}</TableCell>
@@ -13,10 +41,20 @@ function RellenarUsuario(props) {
             <TableCell style={{ textAlign: 'center' }}>{usuario.fechaRegistro}</TableCell>
             <TableCell style={{ textAlign: 'center' }}>{usuario.estado}</TableCell>
             <TableCell style={{ textAlign: 'center' }}>
-                <Button variant="text" size="small" style={{ fontWeight: 'bold', color: 'black' }}>
+            <Button
+                    variant="text"
+                    size="small"
+                    style={{ fontWeight: 'bold', color: 'black' }}
+                    onClick={handleVerClick}
+                >
                     Ver
                 </Button>
-                <Button variant="text" size="small" style={{ fontWeight: 'bold', color: '#CC0000' }}>
+                <Button
+                    variant="text"
+                    size="small"
+                    style={{ fontWeight: 'bold', color: '#CC0000' }}
+                    onClick={handleDesactivarClick}
+                >
                     Desactivar
                 </Button>
             </TableCell>
