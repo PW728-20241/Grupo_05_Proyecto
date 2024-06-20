@@ -3,6 +3,12 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import {Faker,es,es_MX} from '@faker-js/faker';
 
+import { sequelize } from "./database/database";
+import { Usuario } from "./models/Usuario";
+import { Orden } from "./models/Orden";
+import { Producto } from "./models/Producto";
+import { Serie } from "./models/Serie";
+
 const app = express();
 const port = 3100;
 
@@ -121,10 +127,6 @@ app.delete("/productos/:id",function(req,res)
     {
         res.status(404).send("Producto no encontrado");
     }
-});
-
-app.listen(port,function(){
-    console.log("Servidor escuchando en puerto "+port)
 });
 
 /*
@@ -258,3 +260,20 @@ app.get('/usuarios/:id/ordenes', function(req, res) {
 });
 
 
+/**ENDPOINTS PARA LA BASE DE DATOS EN POSTGRES */
+
+async function verificacionConexion() {
+    try {
+        await sequelize.authenticate();
+        console.log("Conexion satisfactoria con la Base de Datos");
+        await sequelize.sync();
+    }
+    catch(error) {
+        console.error("No se puede conectar a la Base de Datos", error);
+    }
+}
+
+app.listen(port,function(){
+    console.log("Servidor escuchando en el puerto "+port);
+    verificacionConexion();
+});
