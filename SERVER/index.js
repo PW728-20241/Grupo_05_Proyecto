@@ -3,20 +3,91 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import {Faker,es,es_MX} from '@faker-js/faker';
 
-import { sequelize } from "./database/database";
+/*import { sequelize } from "./database/database";
 import { Usuario } from "./models/Usuario";
 import { Orden } from "./models/Orden";
 import { Producto } from "./models/Producto";
-import { Serie } from "./models/Serie";
+import { Serie } from "./models/Serie";*/
+
 
 const app = express();
 const port = 3100;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000' 
+}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(express.json());
+app.use('/images', express.static('Imagenes'));
+
+
+/*
+-----------------------------------------------------
+...................ALUMNO 1..........................
+-----------------------------------------------------
+*/
+function crearProducto(title, imageUrl) {
+    return {
+        title: title,
+        imageUrl: imageUrl
+    };
+}
+
+const fila1 = [
+    crearProducto("Assassin's Creed II", '/images/ezio.jpeg'),
+    crearProducto("FIFA 2022", '/images/FIFA_22.webp'),
+    crearProducto("God of War", '/images/god.avif'),
+    crearProducto("Grand Theft Auto V", '/images/Grand_Theft_Auto_V.png'),
+    crearProducto("Mortal Kombat I", '/images/mortal.avif')
+];
+
+const fila2 = [
+    crearProducto("Minecraft", '/images/mine.webp'),
+    crearProducto("Horizon Zero Dawn", '/images/hori.webp'),
+    crearProducto("PUBG", '/images/pub.png'),
+    crearProducto("The Last Of Us Part II", '/images/last.webp'),
+    crearProducto("The Last Of Us", '/images/lastofus.avif')
+];
+
+const fila3 = [
+    crearProducto("Red Dead Redemption 2", '/images/red.avif'),
+    crearProducto("Super Mario Maker", '/images/Super_Mario_Maker_Artwork.jpg'),
+    crearProducto("God of War Ragnarok", '/images/ragna.webp'),
+    crearProducto("Uncharted", '/images/uncharted.jpg'),
+    crearProducto("WWE 2020", '/images/WWE_2K2.jpg')
+];
+
+const Nuevo = [
+    crearProducto("Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", '/images/WWE_2K2.jpg'),
+    crearProducto("GI Joe Classified Series Big Boa, Airborne & More", '/images/ufc.jpg'),
+    crearProducto("Spawn 30 Anniversary", '/images/injustice.jpg')
+];
+
+const Categorias = [
+    crearProducto("Colección de Items 1: Juegos para regresar al colegio", '/images/casa.jpeg'),
+    crearProducto("Colección de Items 2: Juegos para la casa", '/images/colegio.jpeg'),
+    crearProducto("Colección de Items 3: Juegos para los pequeños", '/images/niños.webp')  
+];
+
+// Ruta para devolver el contenido estructurado
+app.get('/contenido', (req, res) => {
+    res.json({
+        fila1: fila1,
+        fila2: fila2,
+        fila3: fila3,
+        Nuevo: Nuevo,
+        Categorias: Categorias
+    });
+});
+
+/*
+-----------------------------------------------------
+...................ALUMNO 5..........................
+-----------------------------------------------------
+*/
+
 
 function crearProductos(id,nombre,editor,precio, fechaRegistro,stock)
 {
@@ -262,7 +333,7 @@ app.get('/usuarios/:id/ordenes', function(req, res) {
 
 /**ENDPOINTS PARA LA BASE DE DATOS EN POSTGRES */
 
-async function verificacionConexion() {
+/*async function verificacionConexion() {
     try {
         await sequelize.authenticate();
         console.log("Conexion satisfactoria con la Base de Datos");
@@ -271,9 +342,9 @@ async function verificacionConexion() {
     catch(error) {
         console.error("No se puede conectar a la Base de Datos", error);
     }
-}
+}*/
 
 app.listen(port,function(){
     console.log("Servidor escuchando en el puerto "+port);
-    verificacionConexion();
+    //verificacionConexion();
 });

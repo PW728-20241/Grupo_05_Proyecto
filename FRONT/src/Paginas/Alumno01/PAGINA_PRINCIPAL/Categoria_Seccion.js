@@ -13,11 +13,10 @@ const Subrayado = styled(Link)(({ theme }) => ({
   },
 }));
 
-function CategoriaSeccion(props) {
-  const{categorias}=props; 
+function CategoriaSeccion({ categorias }) {
   return (
     <Grid container spacing={2} mb={4}>
-      {categorias.map((category, index) => (
+      {categorias && categorias.length > 0 && categorias.map((category, index) => (
         <Grid item xs={12} sm={4} key={index}>
           <Box
             width="100%"
@@ -32,24 +31,21 @@ function CategoriaSeccion(props) {
             justifyContent="center"
             alignItems="center"
             mb={2}
-          ></Box>
-          <Typography variant='h6' align='left'>
-            {category.title}
-          </Typography>
-          <Subrayado href='#'>Learn More</Subrayado>
+          />
+          <Box display="flex" flexDirection="column" alignItems="left">
+            <Typography variant='h6' align='left'>
+              {category.title}
+            </Typography>
+            <Subrayado href='#'>Learn More</Subrayado>
+          </Box>
         </Grid>
       ))}
     </Grid>
   );
-};
+}
 
 CategoriaSeccion.propTypes = {
-  categorias: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  categorias: PropTypes.array.isRequired,
 };
 
 export default CategoriaSeccion;

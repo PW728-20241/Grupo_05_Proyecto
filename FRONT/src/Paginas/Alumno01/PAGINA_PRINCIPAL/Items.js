@@ -13,9 +13,7 @@ const Subrayado = styled(Link)(({ theme }) => ({
   },
 }));
 
-function Items(props) {
-  const { items } = props;
-
+const Items = ({ items }) => {
   return (
     <Grid container spacing={4} justifyContent="center" pb={4}>
       {items.map((item, index) => (
@@ -35,7 +33,9 @@ function Items(props) {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
-          ></Box>
+          >
+            {/* Puedes agregar un mensaje de carga o un fallback aquí si lo deseas */}
+          </Box>
           <Typography variant="h6" align="left">{item.title}</Typography>
           <Subrayado href="#" pb={4}>Learn More</Subrayado>
         </Grid>
