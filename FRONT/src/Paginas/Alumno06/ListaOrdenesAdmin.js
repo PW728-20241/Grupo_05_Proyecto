@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TextField, Link, Pagination } from '@mui/material';
 import BarraLateral2 from '../../Componentes/BarraLateral2';
 import Header2 from '../../Componentes/Header2';
@@ -7,18 +7,20 @@ import RellenarOrden from "./ContenidoTablaOrdenes";
 
 const drawerWidth = 240;
 
-const ordenes = [
-  { id: 1, usuario: 'Juan Sanchez', fechaOrden: '11/03/2023', total: 'S/125.00', correo: 'altavista@123.com', estado: 'Entregado' },
-  { id: 2, usuario: 'Juan Sanchez', fechaOrden: '11/03/2023', total: 'S/125.00', correo: 'altavista@123.com', estado: 'Entregado' },
-  { id: 3, usuario: 'Juan Sanchez', fechaOrden: '11/03/2023', total: 'S/125.00', correo: 'altavista@123.com', estado: 'Entregado' },
-];
-
 const ListaOrdenes = () => {
   const [pagina, setPagina] = useState(1);
-  const [filasPorPagina, setFilasPorPagina] = useState(3);
+  const [filasPorPagina, setFilasPorPagina] = useState(0);
 
   const handleChangePagina = (event, nuevaPagina) => {
     setPagina(nuevaPagina + 1);
+  };
+
+
+  useEffect
+
+
+  const handleSearch = () => {
+    busquedaDatos(searchQuery);
   };
 
   return (
