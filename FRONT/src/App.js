@@ -25,7 +25,7 @@ function App (){
 
               <Route path='/ListaUsuariosAdmin' element={<ListaUsuariosAdmin/>}/>
               <Route path="/usuarios/:id" element={<DetalleUsuarioAdmin/>}/>
-              <Route path='/ListaOrdenessAdmin' element={<ListaOrdenesAdmin/>}/> 
+              <Route path='/ListaOrdenesAdmin' element={<ListaOrdenesAdmin/>}/> 
               <Route path='/DetalleUsuarioAdmin' element={<DetalleUsuarioAdmin/>}/> 
               <Route path='/DetalleOrdenAdmin' element={<DetalleOrdenAdmin/>}/>              
           </Routes>

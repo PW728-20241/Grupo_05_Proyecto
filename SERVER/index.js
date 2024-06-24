@@ -73,7 +73,7 @@ const Categorias = [
     crearProducto("Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "/images/niños.webp")  
 ];
 
-const allItems = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
+const arreglo_general = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
 
 app.get('/contenido', (req, res) => {
     res.json({
@@ -87,7 +87,7 @@ app.get('/contenido', (req, res) => {
 
 app.get('/buscar', (req, res) => {
     const busqueda = req.query.query;
-    const resultado = allItems.filter((result) => result.titulo.toLowerCase().includes(busqueda.toLowerCase()));
+    const resultado = arreglo_general.filter((result) => result.titulo.toLowerCase().includes(busqueda.toLowerCase()));
     res.json(resultado);
 });
 

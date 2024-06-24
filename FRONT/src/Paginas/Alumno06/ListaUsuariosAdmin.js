@@ -26,7 +26,7 @@ function ListaUsuarios() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  async function fetchDatos(query=""){
+  async function busquedaDatos(query=""){
     const url_base = "http://localhost:3100/usuarios";
     const url = query ? `${url_base}-url?correo=${query}&nombre=${query}&apellido=${query}` : url_base; 
     try {
@@ -43,11 +43,11 @@ function ListaUsuarios() {
   }
 
   useEffect(() => {
-      fetchDatos();
+      busquedaDatos();
   }, []);
 
   const handleSearch = () => {
-    fetchDatos(searchQuery);
+    busquedaDatos(searchQuery);
   };
 /*---------------------------------------------------------------------------------------------------------------------*/
 /*INICIO DEL FRONTEND*/
