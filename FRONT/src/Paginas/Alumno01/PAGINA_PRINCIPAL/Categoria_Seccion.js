@@ -34,7 +34,7 @@ function CategoriaSeccion({ categorias }) {
           />
           <Box display="flex" flexDirection="column" alignItems="left">
             <Typography variant='h6' align='left'>
-              {category.title}
+              {category.titulo}
             </Typography>
             <Subrayado href='#'>Learn More</Subrayado>
           </Box>

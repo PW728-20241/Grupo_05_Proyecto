@@ -28,50 +28,53 @@ app.use('/images', express.static('Imagenes'));
 ...................ALUMNO 1..........................
 -----------------------------------------------------
 */
-function crearProducto(title, imageUrl) {
+function crearProducto(titulo, precio, brand, imageUrl) {
     return {
-        title: title,
-        imageUrl: imageUrl
+        titulo,
+        precio,
+        brand,
+        imageUrl
     };
 }
 
 const fila1 = [
-    crearProducto("Assassin's Creed II", '/images/ezio.jpeg'),
-    crearProducto("FIFA 2022", '/images/FIFA_22.webp'),
-    crearProducto("God of War", '/images/god.avif'),
-    crearProducto("Grand Theft Auto V", '/images/Grand_Theft_Auto_V.png'),
-    crearProducto("Mortal Kombat I", '/images/mortal.avif')
+    crearProducto("Assassin's Creed II", 60.00, "Ubisoft", "/images/ezio.jpeg"),
+    crearProducto("FIFA 2022", 49.99, "EA Sports", "/images/FIFA_22.webp"),
+    crearProducto("God of War", 59.99, "Sony", "/images/god.avif"),
+    crearProducto("Grand Theft Auto V", 39.99, "Rockstar", "/images/Grand_Theft_Auto_V.png"),
+    crearProducto("Mortal Kombat I", 54.99, "NetherRealm", "/images/mortal.avif")
 ];
 
 const fila2 = [
-    crearProducto("Minecraft", '/images/mine.webp'),
-    crearProducto("Horizon Zero Dawn", '/images/hori.webp'),
-    crearProducto("PUBG", '/images/pub.png'),
-    crearProducto("The Last Of Us Part II", '/images/last.webp'),
-    crearProducto("The Last Of Us", '/images/lastofus.avif')
+    crearProducto("Minecraft", 29.99, "Mojang", "/images/mine.webp"),
+    crearProducto("Horizon Zero Dawn", 49.99, "Guerrilla", "/images/hori.webp"),
+    crearProducto("PUBG", 19.99, "PUBG Corp", "/images/pub.png"),
+    crearProducto("The Last Of Us Part II", 59.99, "Naughty Dog", "/images/last.webp"),
+    crearProducto("The Last Of Us", 39.99, "Naughty Dog", "/images/lastofus.avif")
 ];
 
 const fila3 = [
-    crearProducto("Red Dead Redemption 2", '/images/red.avif'),
-    crearProducto("Super Mario Maker", '/images/Super_Mario_Maker_Artwork.jpg'),
-    crearProducto("God of War Ragnarok", '/images/ragna.webp'),
-    crearProducto("Uncharted", '/images/uncharted.jpg'),
-    crearProducto("WWE 2020", '/images/WWE_2K2.jpg')
+    crearProducto("Red Dead Redemption 2", 59.99, "Rockstar", "/images/red.avif"),
+    crearProducto("Super Mario Maker", 49.99, "Nintendo", "/images/Super_Mario_Maker_Artwork.jpg"),
+    crearProducto("God of War Ragnarok", 69.99, "Sony", "/images/ragna.webp"),
+    crearProducto("Uncharted", 39.99, "Naughty Dog", "/images/uncharted.jpg"),
+    crearProducto("WWE 2020", 49.99, "2K", "/images/WWE_2K2.jpg")
 ];
 
 const Nuevo = [
-    crearProducto("Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", '/images/WWE_2K2.jpg'),
-    crearProducto("GI Joe Classified Series Big Boa, Airborne & More", '/images/ufc.jpg'),
-    crearProducto("Spawn 30 Anniversary", '/images/injustice.jpg')
+    crearProducto("Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", 99.99, "Wizards of the Coast", "/images/WWE_2K2.jpg"),
+    crearProducto("GI Joe Classified Series Big Boa, Airborne & More", 79.99, "Hasbro", "/images/ufc.jpg"),
+    crearProducto("Spawn 30 Anniversary", 89.99, "McFarlane Toys", "/images/injustice.jpg")
 ];
 
 const Categorias = [
-    crearProducto("Colección de Items 1: Juegos para regresar al colegio", '/images/casa.jpeg'),
-    crearProducto("Colección de Items 2: Juegos para la casa", '/images/colegio.jpeg'),
-    crearProducto("Colección de Items 3: Juegos para los pequeños", '/images/niños.webp')  
+    crearProducto("Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "/images/casa.jpeg"),
+    crearProducto("Colección de Items 2: Juegos para la casa", 19.99, "Various", "/images/colegio.jpeg"),
+    crearProducto("Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "/images/niños.webp")  
 ];
 
-// Ruta para devolver el contenido estructurado
+const allItems = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
+
 app.get('/contenido', (req, res) => {
     res.json({
         fila1: fila1,
@@ -81,6 +84,13 @@ app.get('/contenido', (req, res) => {
         Categorias: Categorias
     });
 });
+
+app.get('/buscar', (req, res) => {
+    const busqueda = req.query.query;
+    const resultado = allItems.filter((result) => result.titulo.toLowerCase().includes(busqueda.toLowerCase()));
+    res.json(resultado);
+});
+
 
 /*
 -----------------------------------------------------

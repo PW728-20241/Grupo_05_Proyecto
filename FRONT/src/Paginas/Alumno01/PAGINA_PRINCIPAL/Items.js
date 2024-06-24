@@ -36,7 +36,7 @@ const Items = ({ items }) => {
           >
             {/* Puedes agregar un mensaje de carga o un fallback aquí si lo deseas */}
           </Box>
-          <Typography variant="h6" align="left">{item.title}</Typography>
+          <Typography variant="h6" align="left">{item.titulo}</Typography>
           <Subrayado href="#" pb={4}>Learn More</Subrayado>
         </Grid>
       ))}
