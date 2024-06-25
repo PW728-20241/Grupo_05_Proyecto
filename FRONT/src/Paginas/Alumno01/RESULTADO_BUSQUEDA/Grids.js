@@ -17,12 +17,16 @@ const TarjetaProducto = ({ producto, indice }) => {
                             justifyContent="center" 
                             alignItems="center"
                         >
-                            <Typography variant="subtitle1">Imagen</Typography>
+                            {producto.imageUrl ? (
+                                <img src={`http://localhost:3100${producto.imageUrl}`} alt={producto.title} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                            ) : (
+                                <Typography variant="subtitle1">Imagen</Typography>
+                            )}
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={9}>
                         <Typography variant="h6">{producto.title}</Typography>
-                        <Typography variant="body2">Por: {producto.brand} - Serie: {producto.series}</Typography>
+                        <Typography variant="body2">Por: {producto.brand}  {producto.series}</Typography>
                         <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'black' }}>S/ {producto.price.toFixed(2)}</Typography>
                     </Grid>
                 </Grid>
@@ -37,6 +41,7 @@ TarjetaProducto.propTypes = {
         price: PropTypes.number.isRequired,
         brand: PropTypes.string.isRequired,
         series: PropTypes.string,
+        imageUrl: PropTypes.string, 
     }).isRequired,
     indice: PropTypes.number.isRequired,
 };
