@@ -15,11 +15,11 @@ const ResultadoBusqueda = () => {
             .then(response => response.json())
             .then(data => {
                 const resultados = data.map((producto, index) => ({
-                    title: producto.titulo,
+                    title: producto.nombre,
                     price: producto.precio,
-                    brand: producto.brand,
+                    brand: producto.editor,
                     imageUrl: producto.imageUrl,
-                    series: producto.series,
+                    
                     link: `#producto-${index}`
                 }));
                 setProductos(resultados);

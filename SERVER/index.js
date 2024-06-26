@@ -28,49 +28,55 @@ app.use('/images', express.static('Imagenes'));
 ...................ALUMNO 1..........................
 -----------------------------------------------------
 */
-function crearProducto(titulo, precio, brand, imageUrl) {
-    return {
-        titulo,
-        precio,
-        brand,
-        imageUrl
-    };
+
+function crearProducto(id,nombre,precio,editor, fechaRegistro,stock,imageUrl)
+{
+    return{
+        id:id,
+        nombre:nombre,
+        editor:editor,
+        precio:precio,
+        fechaRegistro:fechaRegistro,
+        stock:stock,
+        estado:"Activo",
+        imageUrl:imageUrl
+    }
 }
 
 const fila1 = [
-    crearProducto("Assassin's Creed II", 60.00, "Ubisoft", "/images/ezio.jpeg"),
-    crearProducto("FIFA 2022", 49.99, "EA Sports", "/images/FIFA_22.webp"),
-    crearProducto("God of War", 59.99, "Sony", "/images/god.avif"),
-    crearProducto("Grand Theft Auto V", 39.99, "Rockstar", "/images/Grand_Theft_Auto_V.png"),
-    crearProducto("Mortal Kombat I", 54.99, "NetherRealm", "/images/mortal.avif")
+    crearProducto(1, "Assassin's Creed II", 60.00, "Ubisoft", "2024-06-25", 10, "/images/ezio.jpeg"),
+    crearProducto(2, "FIFA 2022", 49.99, "EA Sports", "2024-06-25", 15, "/images/FIFA_22.webp"),
+    crearProducto(3, "God of War", 59.99, "Sony", "2024-06-25", 5, "/images/god.avif"),
+    crearProducto(4, "Grand Theft Auto V", 39.99, "Rockstar", "2024-06-25", 20, "/images/Grand_Theft_Auto_V.png"),
+    crearProducto(5, "Mortal Kombat I", 54.99, "NetherRealm", "2024-06-25", 12, "/images/mortal.avif")
 ];
 
 const fila2 = [
-    crearProducto("Minecraft", 29.99, "Mojang", "/images/mine.webp"),
-    crearProducto("Horizon Zero Dawn", 49.99, "Guerrilla", "/images/hori.webp"),
-    crearProducto("PUBG", 19.99, "PUBG Corp", "/images/pub.png"),
-    crearProducto("The Last Of Us Part II", 59.99, "Naughty Dog", "/images/last.webp"),
-    crearProducto("The Last Of Us", 39.99, "Naughty Dog", "/images/lastofus.avif")
+    crearProducto(6, "Minecraft", 29.99, "Mojang", "2024-06-25", 30, "/images/mine.webp"),
+    crearProducto(7, "Horizon Zero Dawn", 49.99, "Guerrilla", "2024-06-25", 8, "/images/hori.webp"),
+    crearProducto(8, "PUBG", 19.99, "PUBG Corp", "2024-06-25", 25, "/images/pub.png"),
+    crearProducto(9, "The Last Of Us Part II", 59.99, "Naughty Dog", "2024-06-25", 18, "/images/last.webp"),
+    crearProducto(10, "The Last Of Us", 39.99, "Naughty Dog", "2024-06-25", 14, "/images/lastofus.avif")
 ];
 
 const fila3 = [
-    crearProducto("Red Dead Redemption 2", 59.99, "Rockstar", "/images/red.avif"),
-    crearProducto("Super Mario Maker", 49.99, "Nintendo", "/images/Super_Mario_Maker_Artwork.jpg"),
-    crearProducto("God of War Ragnarok", 69.99, "Sony", "/images/ragna.webp"),
-    crearProducto("Uncharted", 39.99, "Naughty Dog", "/images/uncharted.jpg"),
-    crearProducto("WWE 2020", 49.99, "2K", "/images/WWE_2K2.jpg")
+    crearProducto(11, "Red Dead Redemption 2", 59.99, "Rockstar", "2024-06-25", 22, "/images/red.avif"),
+    crearProducto(12, "Super Mario Maker", 49.99, "Nintendo", "2024-06-25", 7, "/images/Super_Mario_Maker_Artwork.jpg"),
+    crearProducto(13, "God of War Ragnarok", 69.99, "Sony", "2024-06-25", 9, "/images/ragna.webp"),
+    crearProducto(14, "Uncharted", 39.99, "Naughty Dog", "2024-06-25", 16, "/images/uncharted.jpg"),
+    crearProducto(15, "WWE 2020", 49.99, "2K", "2024-06-25", 11, "/images/WWE_2K2.jpg")
 ];
 
 const Nuevo = [
-    crearProducto("Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", 99.99, "Wizards of the Coast", "/images/WWE_2K2.jpg"),
-    crearProducto("GI Joe Classified Series Big Boa, Airborne & More", 79.99, "Hasbro", "/images/ufc.jpg"),
-    crearProducto("Spawn 30 Anniversary", 89.99, "McFarlane Toys", "/images/injustice.jpg")
+    crearProducto(16, "Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", 99.99, "Wizards of the Coast", "2024-06-25", 3, "/images/WWE_2K2.jpg"),
+    crearProducto(17, "GI Joe Classified Series Big Boa, Airborne & More", 79.99, "Hasbro", "2024-06-25", 6, "/images/ufc.jpg"),
+    crearProducto(18, "Spawn 30 Anniversary", 89.99, "McFarlane Toys", "2024-06-25", 4, "/images/injustice.jpg")
 ];
 
 const Categorias = [
-    crearProducto("Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "/images/casa.jpeg"),
-    crearProducto("Colección de Items 2: Juegos para la casa", 19.99, "Various", "/images/colegio.jpeg"),
-    crearProducto("Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "/images/niños.webp")  
+    crearProducto(19, "Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "2024-06-25", 27, "/images/casa.jpeg"),
+    crearProducto(20, "Colección de Items 2: Juegos para la casa", 19.99, "Various", "2024-06-25", 35, "/images/colegio.jpeg"),
+    crearProducto(21, "Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "2024-06-25", 42, "/images/niños.webp")
 ];
 
 const arreglo_general = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
@@ -87,7 +93,7 @@ app.get('/contenido', (req, res) => {
 
 app.get('/buscar', (req, res) => {
     const busqueda = req.query.query;
-    const resultado = arreglo_general.filter((result) => result.titulo.toLowerCase().includes(busqueda.toLowerCase()));
+    const resultado = arreglo_general.filter((result) => result.nombre.toLowerCase().includes(busqueda.toLowerCase()));
     res.json(resultado);
 });
 
@@ -99,29 +105,12 @@ app.get('/buscar', (req, res) => {
 */
 
 
-function crearProductos(id,nombre,editor,precio, fechaRegistro,stock)
-{
-    return{
-        id:id,
-        nombre:nombre,
-        editor:editor,
-        precio:precio,
-        fechaRegistro:fechaRegistro,
-        stock:stock,
-        estado:"Activo"
-    }
-}
 
 export const faker = new Faker(
     {locale: [es_MX,es]}
 );
 
-const productos=[
-    crearProductos(1,'EA SPORTS FC™ 24','Electronic Arts', 259.00,'08/06/2024',120),
-    crearProductos(2,'God of War','PlayStation Publishing LLC', 159.00,'08/06/2024',85),
-    crearProductos(3,'Grand Theft Auto V','Rockstar Games', 62.17,'08/06/2024',64),
-    crearProductos(4,'Mortal Kombat 1','Warner Bros. Games', 83.25,'08/06/2024',150)
-]
+
 
 app.get("/productos-url",function(req,res)
 {

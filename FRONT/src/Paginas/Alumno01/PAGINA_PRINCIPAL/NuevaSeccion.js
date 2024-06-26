@@ -36,7 +36,7 @@ function NuevaSeccion(props) {
               alignItems="center"
               mb={2}
             ></Box>
-            <Typography variant='h6'>{newItem.titulo}</Typography>
+            <Typography variant='h6'>{newItem.nombre}</Typography>
             <Subrayado href="#">Learn More</Subrayado>
           </Grid>
         ))}
