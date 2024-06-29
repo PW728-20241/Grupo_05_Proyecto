@@ -7,14 +7,17 @@ import SelectorOrden from '../Alumno01/RESULTADO_BUSQUEDA/Orden';
 
 const ResultadoBusqueda = () => {
     const [productos, setProductos] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [paginaActual, setPaginaActual] = useState(1);
     const productosPorPagina = 5; // Número de productos por página
 
     useEffect(() => {
+        
         fetch('http://localhost:3100/buscar?query=')
             .then(response => response.json())
             .then(data => {
                 const resultados = data.map((producto, index) => ({
+                    id: producto.id,
                     title: producto.nombre,
                     price: producto.precio,
                     brand: producto.editor,

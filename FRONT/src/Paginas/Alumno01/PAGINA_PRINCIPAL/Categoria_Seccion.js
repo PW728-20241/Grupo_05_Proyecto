@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const Subrayado = styled(Link)(({ theme }) => ({
+const Subrayado = styled(RouterLink)(({ theme }) => ({
   fontFamily: 'Arial, sans-serif',
   color: '#000000',
   textDecoration: 'none',
@@ -16,8 +16,8 @@ const Subrayado = styled(Link)(({ theme }) => ({
 function CategoriaSeccion({ categorias }) {
   return (
     <Grid container spacing={2} mb={4}>
-      {categorias && categorias.length > 0 && categorias.map((category, index) => (
-        <Grid item xs={12} sm={4} key={index}>
+      {categorias && categorias.length > 0 && categorias.map((category) => (
+        <Grid item xs={12} sm={4} key={category.id}>
           <Box
             width="100%"
             height={200}
@@ -36,7 +36,7 @@ function CategoriaSeccion({ categorias }) {
             <Typography variant='h6' align='left'>
               {category.nombre}
             </Typography>
-            <Subrayado href='#'>Learn More</Subrayado>
+            <Subrayado to={`/detalle/${category.id}`}>Learn More</Subrayado>
           </Box>
         </Grid>
       ))}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const Subrayado = styled(Link)(({ theme }) => ({
+const Subrayado = styled(RouterLink)(({ theme }) => ({
   fontFamily: 'Arial, sans-serif',
   color: '#000000',
   textDecoration: 'none',
@@ -12,7 +12,6 @@ const Subrayado = styled(Link)(({ theme }) => ({
     textDecoration: 'underline',
   },
 }));
-
 function NuevaSeccion(props) {
   const { nuevos } = props;
 
@@ -37,7 +36,7 @@ function NuevaSeccion(props) {
               mb={2}
             ></Box>
             <Typography variant='h6'>{newItem.nombre}</Typography>
-            <Subrayado href="#">Learn More</Subrayado>
+            <Subrayado to={`/detalle/${newItem.id}`}>Learn More</Subrayado>
           </Grid>
         ))}
       </Grid>

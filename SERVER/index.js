@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import {Faker,es,es_MX} from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 /*import { sequelize } from "./database/database";
 import { Usuario } from "./models/Usuario";
@@ -23,24 +23,27 @@ app.use(express.json());
 app.use('/images', express.static('Imagenes'));
 
 
+
+
 /*
 -----------------------------------------------------
 ...................ALUMNO 1..........................
 -----------------------------------------------------
 */
 
-function crearProducto(id,nombre,precio,editor, fechaRegistro,stock,imageUrl)
-{
-    return{
-        id:id,
-        nombre:nombre,
-        editor:editor,
-        precio:precio,
-        fechaRegistro:fechaRegistro,
-        stock:stock,
-        estado:"Activo",
-        imageUrl:imageUrl
-    }
+function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUrl) {
+    return {
+        id: id,
+        nombre: nombre,
+        editor: editor,
+        precio: precio,
+        fechaRegistro: fechaRegistro,
+        stock: stock,
+        estado: "Activo",
+        imageUrl: imageUrl,
+        descripcion: faker.commerce.productDescription(),
+        caracteristicas: Array.from({ length: 3 }, () => faker.commerce.productMaterial()) 
+    };
 }
 
 const fila1 = [
@@ -91,25 +94,31 @@ app.get('/contenido', (req, res) => {
     });
 });
 
-app.get('/buscar', (req, res) => {
-    const busqueda = req.query.query;
-    const resultado = arreglo_general.filter((result) => result.nombre.toLowerCase().includes(busqueda.toLowerCase()));
-    res.json(resultado);
+
+
+app.get('/producto/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const producto = arreglo_general.find(p => p.id === id);
+    if (producto) {
+        res.json(producto);
+    } else {
+        res.status(404).json({ error: "Producto no encontrado" });
+    }
 });
 
+app.get('/buscar', (req, res) => {
+    const busqueda = req.query.query;
+    const resultado = arreglo_general.filter((producto) =>
+        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    );
+    res.json(resultado);
+});
 
 /*
 -----------------------------------------------------
 ...................ALUMNO 5..........................
 -----------------------------------------------------
 */
-
-
-
-export const faker = new Faker(
-    {locale: [es_MX,es]}
-);
-
 
 
 app.get("/productos-url",function(req,res)

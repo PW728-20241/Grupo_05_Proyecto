@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const Subrayado = styled(Link)(({ theme }) => ({
+const Subrayado = styled(RouterLink)(({ theme }) => ({
   fontFamily: 'Arial, sans-serif',
   color: '#000000',
   textDecoration: 'none',
@@ -12,7 +12,6 @@ const Subrayado = styled(Link)(({ theme }) => ({
     textDecoration: 'underline',
   },
 }));
-
 const Items = ({ items }) => {
   return (
     <Grid container spacing={4} justifyContent="center" pb={4}>
@@ -37,7 +36,7 @@ const Items = ({ items }) => {
             {/* Puedes agregar un mensaje de carga o un fallback aquí si lo deseas */}
           </Box>
           <Typography variant="h6" align="left">{item.nombre}</Typography>
-          <Subrayado href="#" pb={4}>Learn More</Subrayado>
+          <Subrayado to={`/detalle/${item.id}`} pb={4}>Learn More</Subrayado>
         </Grid>
       ))}
     </Grid>
