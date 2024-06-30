@@ -5,6 +5,7 @@ import Footer from '../../Componentes/Footer';
 import BarLateral from '../../Componentes/BarraLateral2';
 import ContenidoTabla from './ContenidoTablaProd';
 
+
 const AdminProducto = () => {
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -47,7 +48,7 @@ const AdminProducto = () => {
                             Agregar Producto
                         </Button>
                     </Box>
-                    <TextField id="buscarP" label="Buscar por ID, Nombre, Editor o Estado" variant="outlined" fullWidth sx={{ mb: 2 }} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                    <TextField id="buscarP" label="Buscar por ID, Nombre o Editor" variant="outlined" fullWidth sx={{ mb: 2 }} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                         InputProps={{
                             endAdornment: (
                                 <Button type="button" onClick={handleSearch} variant="contained" component="label" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
@@ -63,7 +64,7 @@ const AdminProducto = () => {
                                     <TableCell style={{ textAlign: 'center' }}>ID</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Nombre</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Editor</TableCell>
-                                    <TableCell style={{ textAlign: 'center' }}>Precio</TableCell>
+                                    <TableCell style={{ textAlign: 'center' }}>Precio (S/)</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Fecha de Registro</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Stock</TableCell>
                                     <TableCell style={{ textAlign: 'center' }}>Estado</TableCell>
@@ -71,8 +72,8 @@ const AdminProducto = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.length > 0 ? data.map((producto, index) => (
-                                    <ContenidoTabla key={index} producto={producto}/>
+                                {data.length > 0 ? data.filter(producto => producto.estado !== 'Eliminado').map((producto, index) => (
+                                    <ContenidoTabla key={index} arreglo_general={producto}/>
                                 )) : (
                                     <TableRow>
                                         <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>

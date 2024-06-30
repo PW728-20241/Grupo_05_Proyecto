@@ -13,7 +13,7 @@ const DetalleProducto = () => {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const response = await fetch(`http://localhost:3100/producto/${id}`);
+        const response = await fetch(`http://localhost:3100/producto/id/${id}`);
         if (!response.ok) {
           throw new Error('Error al obtener los datos del producto');
         }

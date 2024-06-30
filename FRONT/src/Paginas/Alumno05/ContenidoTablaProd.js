@@ -1,24 +1,27 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Button, TableCell, TableRow } from '@mui/material';
-
+import { Link as RouterLink } from 'react-router-dom';
 function AgregarFila(props) {   
-    const { producto } = props;
-
+    const { arreglo_general } = props;
+    async function eliminarProducto()
+    {
+        
+    }
     return (
         <TableRow >
-            <TableCell style={{ textAlign: 'center' }}>{producto.id}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{producto.nombre}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{producto.editor}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{"S/ " + parseFloat(producto.precio).toFixed(2)}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{producto.fechaRegistro}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{producto.stock}</TableCell>
-            <TableCell style={{ textAlign: 'center' }}>{producto.estado}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.id}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.nombre}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.editor}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{parseFloat(arreglo_general.precio).toFixed(2)}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.fechaRegistro}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.stock}</TableCell>
+            <TableCell style={{ textAlign: 'center' }}>{arreglo_general.estado}</TableCell>
             <TableCell style={{ textAlign: 'center' }}>
-                <Button variant="text" size="small" style={{ fontWeight: 'bold', color: 'black' }}>
+                <Button component={RouterLink} to={`/detalle/${arreglo_general.id}`} variant="text" size="small" style={{ fontWeight: 'bold', color: 'black' }}>
                     Ver
                 </Button>
-                <Button variant="text" size="small" style={{ fontWeight: 'bold', color: '#CC0000' }}>
+                <Button onClick={eliminarProducto} variant="text" size="small" style={{ fontWeight: 'bold', color: '#CC0000' }}>
                     Desactivar
                 </Button>
             </TableCell>
@@ -28,7 +31,7 @@ function AgregarFila(props) {
 }
 
 AgregarFila.propTypes = {
-    producto: PropTypes.shape({
+    arreglo_general: PropTypes.shape({
         id: PropTypes.number.isRequired,
         nombre: PropTypes.string.isRequired,
         editor: PropTypes.string.isRequired,

@@ -96,13 +96,26 @@ app.get('/contenido', (req, res) => {
 
 
 
-app.get('/producto/:id', (req, res) => {
+app.get('/producto/id/:id', (req, res) => {
     const id = parseInt(req.params.id, 10);
     const producto = arreglo_general.find(p => p.id === id);
     if (producto) {
         res.json(producto);
     } else {
         res.status(404).json({ error: "Producto no encontrado" });
+    }
+});
+
+app.get('/producto/nombre/:nombre', (req,res)=>{
+    const nombre = req.params.nombre.toLowerCase();
+    const producto = arreglo_general.find(pub=>pub.nombre.toLocaleLowerCase() === nombre);
+    if(producto)
+    {
+        res.json(producto);
+    }
+    else
+    {
+        res.status(404).send("Producto no encontrado");
     }
 });
 
@@ -124,7 +137,7 @@ app.get('/buscar', (req, res) => {
 app.get("/productos-url",function(req,res)
 {
     const {id, nombre, editor, estado}=req.query;
-    let productoFiltrado = productos;
+    let productoFiltrado = arreglo_general;
     if(id || nombre || editor || estado)
         {
             productoFiltrado = productoFiltrado.filter(pub=>{
@@ -146,7 +159,7 @@ app.get("/productos-url",function(req,res)
     }
 });
 app.get("/productos",function(req,res){
-    res.json(productos);
+    res.json(arreglo_general);
 });
 
 app.post("/productos",function(req,res)
@@ -154,9 +167,9 @@ app.post("/productos",function(req,res)
     const data=req.body;
     if(data&&data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock)
     {
-        const nuevoID = productos.length+1;
-        const nuevoProducto = crearProductos(nuevoID,data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock);
-        productos.push(nuevoProducto);
+        const nuevoID = arreglo_general.length+1;
+        const nuevoProducto = crearProducto(nuevoID,data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock);
+        arreglo_general.push(nuevoProducto);
         res.json(nuevoProducto);
     }
     else
@@ -172,14 +185,14 @@ app.put("/productos/:id",function(req,res)
 
     if(data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock)
     {
-        const producto = productos.find((pub)=>pub.id==id);
+        const producto = arreglo_general.find((pub)=>pub.id==id);
         if(producto)
         {
-            producto.nombre=data.nombre;
-            producto.editor=data.editor;
-            producto.precio=data.precio;
-            producto.fechaRegistro=data.fechaRegistro;
-            producto.stock=data.stock;
+            arreglo_general.nombre=data.nombre;
+            arreglo_general.editor=data.editor;
+            arreglo_general.precio=data.precio;
+            arreglo_general.fechaRegistro=data.fechaRegistro;
+            arreglo_general.stock=data.stock;
             res.json(producto);
         }
         else
@@ -196,10 +209,10 @@ app.put("/productos/:id",function(req,res)
 app.delete("/productos/:id",function(req,res)
 {
     const id=req.params.id;
-    const producto=productos.find((pub)=>pub.id=id);
+    const producto=arreglo_general.find((pub)=>pub.id=id);
     if(producto)
     {
-        producto.estado="No activo";
+        producto.estado="Eliminado";
         res.json(producto);
     }
     else
