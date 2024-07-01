@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Pagination } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import Header1 from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
 import TarjetaProducto from '../Alumno01/RESULTADO_BUSQUEDA/Grids';
@@ -7,28 +8,36 @@ import SelectorOrden from '../Alumno01/RESULTADO_BUSQUEDA/Orden';
 
 const ResultadoBusqueda = () => {
     const [productos, setProductos] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [paginaActual, setPaginaActual] = useState(1);
     const productosPorPagina = 5; // Número de productos por página
 
+    const location = useLocation();
+    const query = location.state?.query || ''; // Obtener el término de búsqueda de la navegación
+
     useEffect(() => {
-        
-        fetch('http://localhost:3100/buscar?query=')
-            .then(response => response.json())
-            .then(data => {
+        const fetchProductos = async () => {
+            try {
+                const response = await fetch(`http://localhost:3100/buscar?query=${query}`);
+                if (!response.ok) {
+                    throw new Error('Error al obtener los datos del servidor');
+                }
+                const data = await response.json();
                 const resultados = data.map((producto, index) => ({
                     id: producto.id,
                     title: producto.nombre,
                     price: producto.precio,
                     brand: producto.editor,
-                    imageUrl: producto.imageUrl,
-                    
+                    imageUrl: `http://localhost:3100${producto.imageUrl}`,
                     link: `#producto-${index}`
                 }));
                 setProductos(resultados);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchProductos();
+    }, [query]);
 
     const [ordenarPor, setOrdenarPor] = useState('Precio');
 
@@ -45,7 +54,6 @@ const ResultadoBusqueda = () => {
         return 0;
     });
 
-    
     const indiceInicio = (paginaActual - 1) * productosPorPagina;
     const indiceFin = indiceInicio + productosPorPagina;
     const productosPaginados = productosOrdenados.slice(indiceInicio, indiceFin);
@@ -62,9 +70,13 @@ const ResultadoBusqueda = () => {
                 <Box mb={2} p={2} border={1} borderColor="grey.400" borderRadius={4}>
                     <Typography variant="h6">Resultados de Búsqueda</Typography>
                 </Box>
-                {productosPaginados.map((producto, index) => (
-                    <TarjetaProducto producto={producto} indice={indiceInicio + index} key={indiceInicio + index} />
-                ))}
+                {productosPaginados.length > 0 ? (
+                    productosPaginados.map((producto, index) => (
+                        <TarjetaProducto producto={producto} indice={indiceInicio + index} key={indiceInicio + index} />
+                    ))
+                ) : (
+                    <Typography variant="body1">No se encontraron productos.</Typography>
+                )}
                 <Box display="flex" justifyContent="center" mt={4} pb={20}>
                     <Pagination
                         count={Math.ceil(productosOrdenados.length / productosPorPagina)}

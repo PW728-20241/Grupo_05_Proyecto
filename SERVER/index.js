@@ -119,12 +119,12 @@ app.get('/producto/nombre/:nombre', function(req,res){
     }
 });
 
-app.get('/buscar', function(req, res){
-    const busqueda = req.query.query;
-    const resultado = arreglo_general.filter((producto) =>
-        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+app.get('/buscar', function(req, res) {
+    const query = req.query.query.toLowerCase();
+    const resultados = arreglo_general.filter(producto => 
+        producto.nombre.toLowerCase().includes(query)
     );
-    res.json(resultado);
+    res.json(resultados);
 });
 
 /*

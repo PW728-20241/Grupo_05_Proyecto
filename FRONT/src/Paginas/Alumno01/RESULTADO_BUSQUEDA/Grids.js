@@ -18,7 +18,7 @@ const TarjetaProducto = ({ producto, indice }) => {
                             alignItems="center"
                         >
                             {producto.imageUrl ? (
-                                <img src={`http://localhost:3100${producto.imageUrl}`} alt={producto.title} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                                <img src={producto.imageUrl} alt={producto.title} style={{ maxWidth: '100%', maxHeight: '100%' }} />
                             ) : (
                                 <Typography variant="subtitle1">Imagen</Typography>
                             )}
