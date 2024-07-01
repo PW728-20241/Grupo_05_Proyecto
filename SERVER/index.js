@@ -42,7 +42,7 @@ function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUr
         estado: "Activo",
         imageUrl: imageUrl,
         descripcion: faker.commerce.productDescription(),
-        caracteristicas: Array.from({ length: 3 }, () => faker.commerce.productMaterial()) 
+        caracteristicas: Array.from({ length: 5}, () => faker.commerce.productMaterial()) 
     };
 }
 
@@ -84,7 +84,7 @@ const Categorias = [
 
 const arreglo_general = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
 
-app.get('/contenido', (req, res) => {
+app.get('/contenido', function(req, res){
     res.json({
         fila1: fila1,
         fila2: fila2,
@@ -96,7 +96,7 @@ app.get('/contenido', (req, res) => {
 
 
 
-app.get('/producto/id/:id', (req, res) => {
+app.get('/producto/id/:id', function(req, res){
     const id = parseInt(req.params.id, 10);
     const producto = arreglo_general.find(p => p.id === id);
     if (producto) {
@@ -106,7 +106,7 @@ app.get('/producto/id/:id', (req, res) => {
     }
 });
 
-app.get('/producto/nombre/:nombre', (req,res)=>{
+app.get('/producto/nombre/:nombre', function(req,res){
     const nombre = req.params.nombre.toLowerCase();
     const producto = arreglo_general.find(pub=>pub.nombre.toLocaleLowerCase() === nombre);
     if(producto)
@@ -119,7 +119,7 @@ app.get('/producto/nombre/:nombre', (req,res)=>{
     }
 });
 
-app.get('/buscar', (req, res) => {
+app.get('/buscar', function(req, res){
     const busqueda = req.query.query;
     const resultado = arreglo_general.filter((producto) =>
         producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
