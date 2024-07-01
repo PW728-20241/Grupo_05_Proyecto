@@ -1,28 +1,26 @@
+// ListaOrdenes.jsx
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TextField, Link, Pagination } from '@mui/material';
+import { Box, Button, Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TextField, Pagination } from '@mui/material';
 import BarraLateral2 from '../../Componentes/BarraLateral2';
 import Header2 from '../../Componentes/Header2';
 import Footer from '../../Componentes/Footer';
-import RellenarOrden from "./ContenidoTablaOrdenes";
+import RellenarOrden from './ContenidoTablaOrdenes';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 const ListaOrdenes = () => {
   const [pagina, setPagina] = useState(1);
-  const [filasPorPagina, setFilasPorPagina] = useState(0);
+  const [filasPorPagina, setFilasPorPagina] = useState(5); 
 
-  const handleChangePagina = (event, nuevaPagina) => {
-    setPagina(nuevaPagina + 1);
-  };
-
-  /*Conexion al backend*/
-  /*----------------------------------------------------------------------------------------------------------------*/
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  async function busquedaDatos(query=""){
+  const navigate = useNavigate();
+
+  async function obtenerOrdenes(query=""){
     const url_base = "http://localhost:3100/ordenes";
-    const url = query ? `${url_base}-url?id=${query}&usuario=${query}` : url_base; 
+    const url = query ? `${url_base}-url?id=${query}&usuarioId=${query}` : url_base; 
     try {
       const res = await fetch(url);
       if (res.status === 200) {
@@ -37,14 +35,38 @@ const ListaOrdenes = () => {
   }
 
   useEffect(() => {
-    busquedaDatos();
+    obtenerOrdenes();
   }, []);
 
   const handleSearch = () => {
-    busquedaDatos(searchQuery);
+    obtenerOrdenes(searchQuery);
   };
 
-  /** INICIO DEL FRONTEND **/
+  // Función para desactivar una orden
+  const handleDesactivarOrden = async (ordenId) => {
+    try {
+      const response = await fetch(`http://localhost:3100/ordenes/${ordenId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.status === 200) {
+        alert("Esta orden ha sido desactivada");
+        obtenerOrdenes(); // Actualizar la lista de órdenes después de desactivar
+      } else {
+        alert("Error al desactivar la orden");
+      }
+    } catch (error) {
+      console.error("Error al desactivar la orden:", error);
+    }
+  };
+
+  // Función para cambiar de página
+  const handleChangePagina = (event, nuevaPagina) => {
+    setPagina(nuevaPagina);
+  };
+
   return (
     <>
       <Header2 />
@@ -52,11 +74,11 @@ const ListaOrdenes = () => {
         <CssBaseline />
         <BarraLateral2 />
         <Container component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center', mb:3}}>
-            <Typography variant="h4" style={{fontWeight:'bold'}} gutterBottom>
-            Lista de Órdenes
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h4" style={{ fontWeight: 'bold' }} gutterBottom>
+              Lista de Órdenes
             </Typography>
-          <Button variant="contained" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
+            <Button variant="contained" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
               Agregar Orden
             </Button>
           </Box>
@@ -64,52 +86,57 @@ const ListaOrdenes = () => {
             fullWidth
             margin="normal"
             variant="outlined"
-            placeholder="Buscar por nombre o apellido de usuario o nro de orden..."
-            value = {searchQuery}
+            placeholder="Buscar por nombre de usuario o ID de orden..."
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               endAdornment: (
-                  <Button type="button" onClick={handleSearch} variant="contained" component="label" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
-                      Buscar
-                  </Button>
+                <Button
+                  type="button"
+                  onClick={handleSearch}
+                  variant="contained"
+                  style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}
+                >
+                  Buscar
+                </Button>
               ),
-          }}
+            }}
           />
           <Paper>
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{textAlign: 'center'}}>ID</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Usuario</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Fecha de Orden</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Monto total</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Correo</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Estado</TableCell>
-                    <TableCell style={{textAlign: 'center'}}>Acciones</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>ID</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Usuario</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Fecha de Orden</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Monto total</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Correo</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Estado</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>Acciones</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.length > 0 ? data.map((item, index) => (
-                      <RellenarOrden key={index} orden={item}/>
-                    )) : (
-                      <TableRow>
-                        <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
-                      </TableRow>
-                    )}
+                  {data.length > 0 ? (
+                    data.map((orden, index) => (
+                      <RellenarOrden key={index} orden={orden} onOrdenDesactivada={handleDesactivarOrden} />
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={7} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
             <Box display="flex" justifyContent="space-between" alignItems="center" padding="16px">
               <Typography variant="body2">Anterior</Typography>
               <Pagination
-              /*
-                count={Math.ceil(ordenes.length / filasPorPagina)}
+                count={Math.ceil(data.length / filasPorPagina)}
                 page={pagina}
                 onChange={handleChangePagina}
                 shape="rounded"
                 color="primary"
-                */
               />
               <Typography variant="body2">Siguiente</Typography>
             </Box>

@@ -351,6 +351,10 @@ app.get('/usuarios/:id/ordenes', function(req, res) {
     }
 });
 
+app.get('/ordenes',function(req,res){
+    res.json(ordenes);
+});
+
 /**SIRVE PARA VER TODA LA LISTA DE ORDENES **/
 app.get('/ordenes-url',function(req,res){
     const {id, usuario} = req.query;
@@ -359,7 +363,7 @@ app.get('/ordenes-url',function(req,res){
         ordenFiltrado = ordenFiltrado.filter((pub)=>{
             return (
                 (id && pub.id.toLowerCase() == id.toLocaleLowerCase()) ||
-                (usuario && pub.usuario.toLocaleLowerCase() == usuario.toLocaleLowerCase())
+                (usuario && pub.usuarioId.toLocaleLowerCase() == usuario.toLocaleLowerCase())
             );
             })
     }
