@@ -351,6 +351,26 @@ app.get('/usuarios/:id/ordenes', function(req, res) {
     }
 });
 
+/**SIRVE PARA VER TODA LA LISTA DE ORDENES **/
+app.get('/ordenes-url',function(req,res){
+    const {id, usuario} = req.query;
+    let ordenFiltrado = ordenes;
+    if (id || usuario){
+        ordenFiltrado = ordenFiltrado.filter((pub)=>{
+            return (
+                (id && pub.id.toLowerCase() == id.toLocaleLowerCase()) ||
+                (usuario && pub.usuario.toLocaleLowerCase() == usuario.toLocaleLowerCase())
+            );
+            })
+    }
+
+    if (ordenFiltrado.length >0){
+        res.json(ordenFiltrado);
+    }
+    else{
+        res.status(404).send("Orden no encontrado");
+    }
+});
 
 /**ENDPOINTS PARA LA BASE DE DATOS EN POSTGRES */
 

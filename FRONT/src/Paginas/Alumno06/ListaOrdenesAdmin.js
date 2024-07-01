@@ -15,14 +15,36 @@ const ListaOrdenes = () => {
     setPagina(nuevaPagina + 1);
   };
 
+  /*Conexion al backend*/
+  /*----------------------------------------------------------------------------------------------------------------*/
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect
+  async function busquedaDatos(query=""){
+    const url_base = "http://localhost:3100/ordenes";
+    const url = query ? `${url_base}-url?id=${query}&usuario=${query}` : url_base; 
+    try {
+      const res = await fetch(url);
+      if (res.status === 200) {
+          const data = await res.json();
+          setData(data);
+      } else {
+          alert("La orden no existe");
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+     }
+  }
 
+  useEffect(() => {
+    busquedaDatos();
+  }, []);
 
   const handleSearch = () => {
     busquedaDatos(searchQuery);
   };
 
+  /** INICIO DEL FRONTEND **/
   return (
     <>
       <Header2 />
@@ -32,7 +54,7 @@ const ListaOrdenes = () => {
         <Container component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center', mb:3}}>
             <Typography variant="h4" style={{fontWeight:'bold'}} gutterBottom>
-            Órdenes
+            Lista de Órdenes
             </Typography>
           <Button variant="contained" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
               Agregar Orden
@@ -43,6 +65,15 @@ const ListaOrdenes = () => {
             margin="normal"
             variant="outlined"
             placeholder="Buscar por nombre o apellido de usuario o nro de orden..."
+            value = {searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                  <Button type="button" onClick={handleSearch} variant="contained" component="label" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
+                      Buscar
+                  </Button>
+              ),
+          }}
           />
           <Paper>
             <TableContainer component={Paper}>
@@ -59,9 +90,13 @@ const ListaOrdenes = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ordenes.map((item) => (
-                    <RellenarOrden key={item.id} orden={item} />
-                  ))}
+                  {data.length > 0 ? data.map((item, index) => (
+                      <RellenarOrden key={index} orden={item}/>
+                    )) : (
+                      <TableRow>
+                        <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
+                      </TableRow>
+                    )}
                 </TableBody>
               </Table>
             </TableContainer>
