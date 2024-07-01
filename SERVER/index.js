@@ -209,7 +209,7 @@ app.put("/productos/:id",function(req,res)
 app.delete("/productos/:id",function(req,res)
 {
     const id=req.params.id;
-    const producto=arreglo_general.find((pub)=>pub.id=id);
+    const producto=arreglo_general.find((pub)=>pub.id==id);
     if(producto)
     {
         producto.estado="Eliminado";
