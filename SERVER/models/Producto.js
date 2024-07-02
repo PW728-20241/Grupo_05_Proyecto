@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../database/database";
+import { sequelize } from "../database/database.js";
 
 export const Producto = sequelize.define(
     "Producto", {
@@ -9,24 +9,34 @@ export const Producto = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        detalle: {
+        nombre: {
             type: DataTypes.STRING
         },
-        serie: {
+        editor: {
             type: DataTypes.STRING
         },
         precio: {
-            type: DataTypes.STRING
+            type: DataTypes.FLOAT
         },
         fechaRegistro: {
             type: DataTypes.STRING
         },
         stock: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
         estado: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
+            type: DataTypes.STRING
+        },
+        imageUrl: {
+            type: DataTypes.STRING
+        },
+        descripcion: {
+            type: DataTypes.TEXT,
+            
+        },
+        caracteristicas: {
+            type: DataTypes.STRING ,
+            
         }
     }, {
         freezeTableName: true

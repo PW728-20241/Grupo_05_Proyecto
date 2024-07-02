@@ -3,11 +3,11 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { faker } from '@faker-js/faker';
 
-/*import { sequelize } from "./database/database";
-import { Usuario } from "./models/Usuario";
-import { Orden } from "./models/Orden";
-import { Producto } from "./models/Producto";
-import { Serie } from "./models/Serie";*/
+import { sequelize } from "./database/database.js";
+//import { Usuario } from "./models/Usuario";
+//import { Orden } from "./models/Orden";
+import { Producto } from "./models/Producto.js";
+//import { Serie } from "./models/Serie";
 
 
 const app = express();
@@ -22,7 +22,16 @@ app.use(bodyParser.urlencoded({
 app.use(express.json());
 app.use('/images', express.static('Imagenes'));
 
-
+async function verificacionConexion(){
+    try{
+        sequelize.authenticate();
+        console.log("Conexion satisfactoria con la BD");
+        await sequelize.sync();
+    }
+    catch(error){
+        console.error("No se puede conectar a la BD",error);
+    }
+}
 
 
 /*
@@ -93,6 +102,60 @@ app.get('/contenido', function(req, res){
         Categorias: Categorias
     });
 });
+
+app.get("/productos", async function(req,res){
+    const listaProducto = await Producto.findAll();
+    res.json(listaProducto);
+
+});
+
+/*app.post('/productos1', async function(req, res){
+    const data = req.body;
+
+    if(data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock&&data.estado&&data.imageUrl&&data.descripcion&&data.caracteristicas){
+        const productCreado = await Producto.create({
+            nombre:data.nombre,
+            editor:data.editor,
+            precio:data.precio,
+            fechaRegistro:data.fechaRegistro,
+            stock:data.stock,
+            estado:data.estado,
+            imageUrl:data.imageUrl,
+            descripcion:data.descripcion,
+            caracteristicas:data.caracteristicas
+
+        });
+        res.status(201).json(productCreado);
+        }
+        else{
+            res.status(400).send("Faltan datos");
+        }
+    
+});*/
+
+/*app.post('/productos1', async function(req, res) {
+    try {
+        const productosCreados = await Promise.all(arreglo_general.map(async (producto) => {
+            const productCreado = await Producto.create({
+                nombre: producto.nombre,
+                editor: producto.editor,
+                precio: producto.precio,
+                fechaRegistro: producto.fechaRegistro,
+                stock: producto.stock,
+                estado: producto.estado,
+                imageUrl: producto.imageUrl,
+                descripcion: producto.descripcion,
+                caracteristicas: producto.caracteristicas
+            });
+            return productCreado;
+        }));
+
+        res.status(201).json(productosCreados);
+    } catch (error) {
+        console.error("Error interno al crear los productos:", error);
+        res.status(500).send("Error interno al crear los productos");
+    }
+});*/
 
 
 
@@ -391,5 +454,5 @@ app.get('/ordenes-url',function(req,res){
 
 app.listen(port,function(){
     console.log("Servidor escuchando en el puerto "+port);
-    //verificacionConexion();
+    verificacionConexion();
 });
