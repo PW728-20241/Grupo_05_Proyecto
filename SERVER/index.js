@@ -3,10 +3,10 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { faker } from '@faker-js/faker';
 
-import { sequelize } from "./database/database.js";
+//import { sequelize } from "./database/database.js";
 //import { Usuario } from "./models/Usuario";
 //import { Orden } from "./models/Orden";
-import { Producto } from "./models/Producto.js";
+//import { Producto } from "./models/Producto.js";
 //import { Serie } from "./models/Serie";
 
 
@@ -40,7 +40,7 @@ async function verificacionConexion(){
 -----------------------------------------------------
 */
 
-function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUrl) {
+function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUrl, categoria, nuevo) {
     return {
         id: id,
         nombre: nombre,
@@ -50,57 +50,44 @@ function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUr
         stock: stock,
         estado: "Activo",
         imageUrl: imageUrl,
+        categoria: categoria,
+        nuevo: nuevo,
         descripcion: faker.commerce.productDescription(),
-        caracteristicas: Array.from({ length: 5}, () => faker.commerce.productMaterial()) 
+        caracteristicas: Array.from({ length: 5 }, () => faker.commerce.productMaterial())
     };
 }
 
-const fila1 = [
-    crearProducto(1, "Assassin's Creed II", 60.00, "Ubisoft", "2024-06-25", 10, "/images/ezio.jpeg"),
-    crearProducto(2, "FIFA 2022", 49.99, "EA Sports", "2024-06-25", 15, "/images/FIFA_22.webp"),
-    crearProducto(3, "God of War", 59.99, "Sony", "2024-06-25", 5, "/images/god.avif"),
-    crearProducto(4, "Grand Theft Auto V", 39.99, "Rockstar", "2024-06-25", 20, "/images/Grand_Theft_Auto_V.png"),
-    crearProducto(5, "Mortal Kombat I", 54.99, "NetherRealm", "2024-06-25", 12, "/images/mortal.avif")
+const productos = [
+    crearProducto(1, "Assassin's Creed II", 60.00, "Ubisoft", "2024-06-25", 10, "/images/ezio.jpeg", "Aventura", false),
+    crearProducto(2, "FIFA 2022", 49.99, "EA Sports", "2024-06-25", 15, "/images/FIFA_22.webp", "Deportes", false),
+    crearProducto(3, "God of War", 59.99, "Sony", "2024-06-25", 5, "/images/god.avif", "Acción", false),
+    crearProducto(4, "Grand Theft Auto V", 39.99, "Rockstar", "2024-06-25", 20, "/images/Grand_Theft_Auto_V.png", "Aventura", false),
+    crearProducto(5, "Mortal Kombat I", 54.99, "NetherRealm", "2024-06-25", 12, "/images/mortal.avif", "Lucha", false),
+    crearProducto(6, "Minecraft", 29.99, "Mojang", "2024-06-25", 30, "/images/mine.webp", "Aventura", false),
+    crearProducto(7, "Horizon Zero Dawn", 49.99, "Guerrilla", "2024-06-25", 8, "/images/hori.webp", "Aventura", false),
+    crearProducto(8, "PUBG", 19.99, "PUBG Corp", "2024-06-25", 25, "/images/pub.png", "Disparos", false),
+    crearProducto(9, "The Last Of Us Part II", 59.99, "Naughty Dog", "2024-06-25", 18, "/images/last.webp", "Aventura", false),
+    crearProducto(10, "The Last Of Us", 39.99, "Naughty Dog", "2024-06-25", 14, "/images/lastofus.avif", "Aventura", false),
+    crearProducto(11, "Red Dead Redemption 2", 59.99, "Rockstar", "2024-06-25", 22, "/images/red.avif", "Aventura", false),
+    crearProducto(12, "Super Mario Maker", 49.99, "Nintendo", "2024-06-25", 7, "/images/Super_Mario_Maker_Artwork.jpg", "Plataformas", false),
+    crearProducto(13, "God of War Ragnarok", 69.99, "Sony", "2024-06-25", 9, "/images/ragna.webp", "Acción", false),
+    crearProducto(14, "Uncharted", 39.99, "Naughty Dog", "2024-06-25", 16, "/images/uncharted.jpg", "Aventura", false),
+    crearProducto(15, "WWE 2020", 49.99, "2K", "2024-06-25", 11, "/images/WWE_2K2.jpg", "Deportes", false),
+
+
+    crearProducto(16, "Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", 99.99, "Wizards of the Coast", "2024-06-25", 3, "/images/WWE_2K2.jpg", "Various", true),
+    crearProducto(17, "GI Joe Classified Series Big Boa, Airborne & More", 79.99, "Hasbro", "2024-06-25", 6, "/images/ufc.jpg", "Various", true),
+    crearProducto(18, "Spawn 30 Anniversary", 89.99, "McFarlane Toys", "2024-06-25", 4, "/images/injustice.jpg", "Various", true),
+
+
+    crearProducto(19, "Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "2024-06-25", 27, "/images/casa.jpeg", "Colección", false),
+    crearProducto(20, "Colección de Items 2: Juegos para la casa", 19.99, "Various", "2024-06-25", 35, "/images/colegio.jpeg", "Colección", false),
+    crearProducto(21, "Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "2024-06-25", 42, "/images/niños.webp", "Colección", false)
 ];
 
-const fila2 = [
-    crearProducto(6, "Minecraft", 29.99, "Mojang", "2024-06-25", 30, "/images/mine.webp"),
-    crearProducto(7, "Horizon Zero Dawn", 49.99, "Guerrilla", "2024-06-25", 8, "/images/hori.webp"),
-    crearProducto(8, "PUBG", 19.99, "PUBG Corp", "2024-06-25", 25, "/images/pub.png"),
-    crearProducto(9, "The Last Of Us Part II", 59.99, "Naughty Dog", "2024-06-25", 18, "/images/last.webp"),
-    crearProducto(10, "The Last Of Us", 39.99, "Naughty Dog", "2024-06-25", 14, "/images/lastofus.avif")
-];
-
-const fila3 = [
-    crearProducto(11, "Red Dead Redemption 2", 59.99, "Rockstar", "2024-06-25", 22, "/images/red.avif"),
-    crearProducto(12, "Super Mario Maker", 49.99, "Nintendo", "2024-06-25", 7, "/images/Super_Mario_Maker_Artwork.jpg"),
-    crearProducto(13, "God of War Ragnarok", 69.99, "Sony", "2024-06-25", 9, "/images/ragna.webp"),
-    crearProducto(14, "Uncharted", 39.99, "Naughty Dog", "2024-06-25", 16, "/images/uncharted.jpg"),
-    crearProducto(15, "WWE 2020", 49.99, "2K", "2024-06-25", 11, "/images/WWE_2K2.jpg")
-];
-
-const Nuevo = [
-    crearProducto(16, "Magic The Gathering: Colección de Invierno Fase 2 2024 Nueva Temporada", 99.99, "Wizards of the Coast", "2024-06-25", 3, "/images/WWE_2K2.jpg"),
-    crearProducto(17, "GI Joe Classified Series Big Boa, Airborne & More", 79.99, "Hasbro", "2024-06-25", 6, "/images/ufc.jpg"),
-    crearProducto(18, "Spawn 30 Anniversary", 89.99, "McFarlane Toys", "2024-06-25", 4, "/images/injustice.jpg")
-];
-
-const Categorias = [
-    crearProducto(19, "Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "2024-06-25", 27, "/images/casa.jpeg"),
-    crearProducto(20, "Colección de Items 2: Juegos para la casa", 19.99, "Various", "2024-06-25", 35, "/images/colegio.jpeg"),
-    crearProducto(21, "Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "2024-06-25", 42, "/images/niños.webp")
-];
-
-const arreglo_general = [...fila1, ...fila2, ...fila3, ...Nuevo, ...Categorias];
 
 app.get('/contenido', function(req, res){
-    res.json({
-        fila1: fila1,
-        fila2: fila2,
-        fila3: fila3,
-        Nuevo: Nuevo,
-        Categorias: Categorias
-    });
+    res.json(productos);
 });
 
 app.get("/productos", async function(req,res){
@@ -159,9 +146,9 @@ app.get("/productos", async function(req,res){
 
 
 
-app.get('/producto/id/:id', function(req, res){
+app.get('/producto/id/:id', function(req, res) {
     const id = parseInt(req.params.id, 10);
-    const producto = arreglo_general.find(p => p.id === id);
+    const producto = productos.find(p => p.id === id);
     if (producto) {
         res.json(producto);
     } else {
@@ -169,27 +156,23 @@ app.get('/producto/id/:id', function(req, res){
     }
 });
 
-app.get('/producto/nombre/:nombre', function(req,res){
+app.get('/producto/nombre/:nombre', function(req, res){
     const nombre = req.params.nombre.toLowerCase();
-    const producto = arreglo_general.find(pub=>pub.nombre.toLocaleLowerCase() === nombre);
-    if(producto)
-    {
+    const producto = productos.find(pub => pub.nombre.toLowerCase() === nombre);
+    if (producto) {
         res.json(producto);
-    }
-    else
-    {
+    } else {
         res.status(404).send("Producto no encontrado");
     }
 });
 
 app.get('/buscar', function(req, res) {
     const query = req.query.query.toLowerCase();
-    const resultados = arreglo_general.filter(producto => 
+    const resultados = productos.filter(producto => 
         producto.nombre.toLowerCase().includes(query)
     );
     res.json(resultados);
 });
-
 /*
 -----------------------------------------------------
 ...................ALUMNO 5..........................
@@ -454,5 +437,5 @@ app.get('/ordenes-url',function(req,res){
 
 app.listen(port,function(){
     console.log("Servidor escuchando en el puerto "+port);
-    verificacionConexion();
+    //verificacionConexion();
 });

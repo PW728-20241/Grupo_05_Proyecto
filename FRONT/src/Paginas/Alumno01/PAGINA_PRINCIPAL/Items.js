@@ -12,6 +12,7 @@ const Subrayado = styled(RouterLink)(({ theme }) => ({
     textDecoration: 'underline',
   },
 }));
+
 const Items = ({ items }) => {
   return (
     <Grid container spacing={4} justifyContent="center" pb={4}>
@@ -47,7 +48,8 @@ Items.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       imageUrl: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
+      nombre: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
     })
   ).isRequired,
 };

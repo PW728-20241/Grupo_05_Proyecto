@@ -8,15 +8,11 @@ import Items from './PAGINA_PRINCIPAL/Items';
 import NuevaSeccion from './PAGINA_PRINCIPAL/NuevaSeccion';
 
 const PaginaPrincipal = () => {
-  const [fila1, setFila1] = useState([]);
-  const [fila2, setFila2] = useState([]);
-  const [fila3, setFila3] = useState([]);
-  const [Nuevo, setNuevo] = useState([]);
-  const [Categorias, setCategorias] = useState([]);
+  const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    async function obtenerContenido() {
-      try {        
+    async function obtenerProductos() {
+      try {
         const response = await fetch('http://localhost:3100/contenido');
         if (!response.ok) {
           throw new Error('Error al obtener los datos del servidor');
@@ -25,38 +21,52 @@ const PaginaPrincipal = () => {
         
         console.log('Data received from backend:', data);
 
-        
         const makeAbsoluteUrls = (items) => items.map(item => ({
           ...item,
           imageUrl: `http://localhost:3100${item.imageUrl}`
         }));
 
-        setFila1(makeAbsoluteUrls(data.fila1));
-        setFila2(makeAbsoluteUrls(data.fila2));
-        setFila3(makeAbsoluteUrls(data.fila3));
-        setNuevo(makeAbsoluteUrls(data.Nuevo));
-        setCategorias(makeAbsoluteUrls(data.Categorias));
+        setProductos(makeAbsoluteUrls(data));
       } catch (error) {
         console.error('Error al obtener datos del servidor:', error);
       }
     }
 
-    obtenerContenido();
+    obtenerProductos();
   }, []);
+
+  // Filtrar productos por categorías específicas
+  const categorias = productos.filter(producto => producto.categoria === 'Colección');
+  
+  // Filtrar productos marcados como nuevos
+  const nuevos = productos.filter(producto => producto.nuevo === true);
+
+  // Dividir productos en filas para mostrar en la página
+  const fila1 = productos.slice(0, 5);
+  const fila2 = productos.slice(5, 10);
+  const fila3 = productos.slice(10, 15);
 
   return (
     <>
       <Header />
       <Container maxWidth="lg">
-        <BarradeBusqueda /> 
-        <CategoriaSeccion categorias={Categorias} /> 
+        <BarradeBusqueda />
+        
+        {/* Mostrar sección de categorías filtradas */}
+        <CategoriaSeccion categorias={categorias} />
+        
         <Box id='ofertas' mb={4}>
+          {/* Mostrar filas de productos */}
           <Items items={fila1} />
           <Items items={fila2} />
         </Box>
         <Divider />
-        <NuevaSeccion nuevos={Nuevo} /> 
+        
+        {/* Mostrar sección de nuevos productos */}
+        <NuevaSeccion nuevos={nuevos} />
+        
         <Box mb={4}>
+          {/* Mostrar tercera fila de productos */}
           <Items items={fila3} />
         </Box>
       </Container>
