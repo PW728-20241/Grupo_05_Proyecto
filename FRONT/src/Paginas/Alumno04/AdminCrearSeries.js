@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, TextField, Button, Typography, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CreateSerie = () => {
   const [nombre, setNombre] = useState('');
@@ -17,12 +15,20 @@ const CreateSerie = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3100/productos')
-      .then(response => {
-        setProductos(response.data);
-        setFilteredProducts(response.data);
-      })
-      .catch(error => console.error(error));
+    async function fetchProducts() {
+      try {
+        const response = await fetch('http://localhost:3100/productos');
+        if (!response.ok) {
+          throw new Error('Error fetching products');
+        }
+        const data = await response.json();
+        setProductos(data);
+        setFilteredProducts(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    fetchProducts();
   }, []);
 
   const handleAddProduct = (product) => {
@@ -43,15 +49,27 @@ const CreateSerie = () => {
     setFilteredProducts(filtered);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nuevaSerie = { nombre, descripcion, fechaCreacion: new Date().toISOString().split('T')[0], productos: serieProductos };
-    axios.post('http://localhost:3100/series', nuevaSerie)
-      .then(response => {
-        console.log('Serie creada:', response.data);
-        navigate('/ListadoSeries'); // Redirige a la página de series
-      })
-      .catch(error => console.error('Error creando la serie:', error));
+    
+    try {
+      const response = await fetch('http://localhost:3100/series', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuevaSerie)
+      });
+      if (!response.ok) {
+        throw new Error('Error creating series');
+      }
+      const data = await response.json();
+      console.log('Serie creada:', data);
+      navigate('/ListadoSeries'); // Redirige a la página de series
+    } catch (error) {
+      console.error('Error creando la serie:', error);
+    }
   };
 
   return (
@@ -117,7 +135,7 @@ const CreateSerie = () => {
                   <AddIcon />
                 </IconButton>
               </Box>
-              <Button type="submit" variant="contained" component={Link} to="/ListaSeries" color="primary" fullWidth sx={{ mt: 2 }}>
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                 Guardar
               </Button>
             </Grid>

@@ -205,7 +205,7 @@ app.get('/buscar', async function(req, res) {
 
 
 app.get("/productos-url",function(req,res)
-{
+{   
     const {id, nombre, editor, estado}=req.query;
     let productoFiltrado = arreglo_general;
     if(id || nombre || editor || estado)
@@ -301,24 +301,32 @@ app.delete("/productos/:id",function(req,res)
 ...................ALUMNO 6..........................
 -----------------------------------------------------
 */
-
-function crearUsuario (id,nombre,apellido,correo,fechaRegistro,estado){
+function crearUsuario(id, nombre, apellido, correo, password, fechaRegistro, estado) {
     return {
         id: id,
         nombre: nombre,
         apellido: apellido,
         correo: correo,
+        password: password,
         fechaRegistro: fechaRegistro,
         estado: estado
     }
-};
+}
 
 const usuarios = [
-    crearUsuario(1,'Kaoru','Mitoma','correo@ejemplo.com','11/02/2022','Activo'),
-    crearUsuario(2,'Phill','Phoden','correo2@ejemplo.com','11/02/2022','Activo'),
-    crearUsuario(3,'Gustavo','Gomez','correo3@ejemplo.com','11/02/2022','Activo'),
-    crearUsuario(4,'Gianluca','Lapadula','correo4@ejemplo.com','11/02/2022','Activo'),
+    crearUsuario(1, 'Kaoru', 'Mitoma', 'correo@ejemplo.com', 'password1', '11/02/2022', 'Activo'),
+    crearUsuario(2, 'Phill', 'Phoden', 'correo2@ejemplo.com', 'password2', '11/02/2022', 'Activo'),
+    crearUsuario(3, 'Gustavo', 'Gomez', 'correo3@ejemplo.com', 'password3', '11/02/2022', 'Activo'),
+    crearUsuario(4, 'Gianluca', 'Lapadula', 'correo4@ejemplo.com', 'password4', '11/02/2022', 'Activo'),
 ];
+
+app.post('/registrar', (req, res) => {
+    const { nombre, apellido, correo, password } = req.body;
+    const nuevoID = usuarios.length + 1;
+    const nuevoUsuario = crearUsuario(nuevoID, nombre, apellido, correo, password, new Date().toISOString().split('T')[0], 'Activo');
+    usuarios.push(nuevoUsuario);
+    res.json(nuevoUsuario);
+});
 
 app.get('/usuarios',function(req,res){
     res.json(usuarios);

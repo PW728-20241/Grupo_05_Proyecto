@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, CardMedia, CardContent, Button } from '@mui/material';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function RecommendedItems() {
@@ -10,8 +9,12 @@ function RecommendedItems() {
   useEffect(() => {
     async function fetchRandomItems() {
       try {
-        const response = await axios.get('http://localhost:3100/productos/random');
-        setRecommendedItems(response.data);
+        const response = await fetch('http://localhost:3100/productos/random');
+        if (!response.ok) {
+          throw new Error('Error fetching random items');
+        }
+        const data = await response.json();
+        setRecommendedItems(data);
       } catch (error) {
         console.error("Error fetching random items:", error);
       }

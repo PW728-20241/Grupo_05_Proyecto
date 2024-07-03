@@ -4,7 +4,6 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 const SeriesDetail = () => {
   const { id } = useParams();
@@ -15,18 +14,28 @@ const SeriesDetail = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3100/series/${id}`)
-      .then(response => {
-        setSerie(response.data);
-      })
-      .catch(error => console.error(error));
+    async function fetchData() {
+      try {
+        let response = await fetch(`http://localhost:3100/series/${id}`);
+        if (!response.ok) {
+          throw new Error('Error fetching series data');
+        }
+        let data = await response.json();
+        setSerie(data);
 
-    axios.get('http://localhost:3100/productos')
-      .then(response => {
-        setProductos(response.data);
-        setFilteredProducts(response.data);
-      })
-      .catch(error => console.error(error));
+        response = await fetch('http://localhost:3100/productos');
+        if (!response.ok) {
+          throw new Error('Error fetching products');
+        }
+        data = await response.json();
+        setProductos(data);
+        setFilteredProducts(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    fetchData();
   }, [id]);
 
   const handleAddProduct = (product) => {
@@ -48,10 +57,23 @@ const SeriesDetail = () => {
     updateSerie(updatedSerie);
   };
 
-  const updateSerie = (updatedSerie) => {
-    axios.put(`http://localhost:3100/series/${id}`, updatedSerie)
-      .then(response => console.log("Serie actualizada:", response.data))
-      .catch(error => console.error("Error actualizando la serie:", error));
+  const updateSerie = async (updatedSerie) => {
+    try {
+      const response = await fetch(`http://localhost:3100/series/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedSerie)
+      });
+      if (!response.ok) {
+        throw new Error('Error updating series');
+      }
+      const data = await response.json();
+      console.log("Serie actualizada:", data);
+    } catch (error) {
+      console.error("Error actualizando la serie:", error);
+    }
   };
 
   const handleSearchChange = (event) => {
@@ -147,7 +169,7 @@ const SeriesDetail = () => {
                   <AddIcon />
                 </IconButton>
               </Box>
-              <Button variant="contained" color="primary" component={Link} to="/ListaSeries"fullWidth sx={{ mt: 2 }} onClick={() => updateSerie(serie)}>
+              <Button variant="contained" color="primary" component={Link} to="/ListaSeries" fullWidth sx={{ mt: 2 }} onClick={() => updateSerie(serie)}>
                 Guardar
               </Button>
             </Grid>

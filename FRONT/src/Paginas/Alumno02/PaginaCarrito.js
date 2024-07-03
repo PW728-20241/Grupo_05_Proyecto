@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Container, Button, FormControl, Select, MenuItem } from '@mui/material';
 import Header1 from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
+import {useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [savedItems, setSavedItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -46,6 +48,11 @@ const CartPage = () => {
   };
 
   const total = cartItems.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+
+  const handleCheckout = () => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -87,7 +94,7 @@ const CartPage = () => {
             </Box>
             <Box sx={{ textAlign: 'right', padding: 2, borderTop: '1px solid #ddd', mt: 2 }}>
               <Typography variant="h6" sx={{ mb: 1 }}>Total: S/ {total.toFixed(2)}</Typography>
-              <Button variant="contained" color="primary">Checkout</Button>
+              <Button variant="contained" onClick={handleCheckout} color="primary">Checkout</Button>
             </Box>
           </>
         )}

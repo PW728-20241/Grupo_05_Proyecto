@@ -4,8 +4,6 @@ import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import Header from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
 
-const usuariosMock = [];
-
 const Registrar = () => {
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
@@ -15,7 +13,7 @@ const Registrar = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const manejarRegistro = (e) => {
+    const manejarRegistro = async (e) => {
         e.preventDefault();
         
         if (!nombre || !apellido || !correo || !password || !confirmPassword) {
@@ -29,9 +27,27 @@ const Registrar = () => {
         }
 
         const nuevoUsuario = { nombre, apellido, correo, password };
-        usuariosMock.push(nuevoUsuario);
-        alert('Registro exitoso');
-        navigate('/IniciarSesion');
+        
+        try {
+            const response = await fetch('http://localhost:3100/registrar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoUsuario),
+            });
+
+            if (response.ok) {
+                alert('Registro exitoso');
+                navigate('/IniciarSesion');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || 'Error en el registro');
+            }
+        } catch (error) {
+            console.error('Error registrando usuario:', error);
+            setError('Error registrando usuario');
+        }
     };
 
     return (
@@ -55,13 +71,14 @@ const Registrar = () => {
                         flexDirection: 'column',
                         alignItems: 'center',
                         width: 400,
-                        padding: 3,
+                        padding: 2,
+                        margin: 1,
                         boxShadow: 'none',
                         backgroundColor: '#fff',
                         borderRadius: 0,
                     }}
                 >
-                    <Typography sx={{ marginBottom: 5, color: '#333', fontSize: 18, fontWeight: 'bold' }}>
+                    <Typography sx={{ marginBottom: 2, color: '#333', fontSize: 18, fontWeight: 'bold' }}>
                         Registra una nueva cuenta
                     </Typography>
                     <TextField
@@ -118,7 +135,7 @@ const Registrar = () => {
                             width: '100%',
                             backgroundColor: '#000000',
                             color: '#fff',
-                            marginTop: 5,
+                            marginTop: 1,
                             padding: '10px',
                             borderRadius: '5px',
                             '&:hover': {

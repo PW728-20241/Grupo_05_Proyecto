@@ -17,7 +17,8 @@ import DetalleUsuario from './Paginas/Alumno04/ConfigDRU';
 import CambiarContraseña from './Paginas/Alumno04/cambiarcontraof';
 import ThankYouPage from './Paginas/Alumno02/graciascompra';
 import CartPage from './Paginas/Alumno02/PaginaCarrito';
-
+import CheckoutPage from './Paginas/Alumno02/checkout';
+import Registrar from './Paginas/Alumno03/Registrar';
 function App (){
   return (
      <Router>
@@ -42,6 +43,8 @@ function App (){
               <Route path='/carrito' element={<CartPage/>}/>
               <Route path='/graciascompra' element={<ThankYouPage/>}/>
               <Route path='/carritocompra' element={<CartPage/>}/>
+              <Route path='/checkout' element={<CheckoutPage/>}/>
+              <Route path='/registrar'element={<Registrar/>}/>
           </Routes>
      </Router>
   );
