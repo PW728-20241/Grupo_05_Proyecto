@@ -52,21 +52,20 @@ const PaginaPrincipal = () => {
       <Container maxWidth="lg">
         <BarradeBusqueda />
         
-        {/* Mostrar sección de categorías filtradas */}
         <CategoriaSeccion categorias={categorias} />
         
         <Box id='ofertas' mb={4}>
-          {/* Mostrar filas de productos */}
+          
           <Items items={fila1} />
           <Items items={fila2} />
         </Box>
         <Divider />
         
-        {/* Mostrar sección de nuevos productos */}
+       
         <NuevaSeccion nuevos={nuevos} />
         
         <Box mb={4}>
-          {/* Mostrar tercera fila de productos */}
+          
           <Items items={fila3} />
         </Box>
       </Container>
