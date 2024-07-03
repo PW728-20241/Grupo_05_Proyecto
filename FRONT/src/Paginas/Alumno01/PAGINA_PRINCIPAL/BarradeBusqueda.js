@@ -10,20 +10,6 @@ const BarradeBusqueda = () => {
     navigate(`/resultado`, { state: { query: searchTerm } });
   };
 
-  const fetchProductoPorNombre = async (nombre) => {
-    try {
-      const response = await fetch(`http://localhost:3100/producto/nombre/${nombre}`);
-      if (!response.ok) {
-        throw new Error('Producto no encontrado');
-      }
-      const producto = await response.json();
-      console.log('Producto encontrado:', producto);
-      // Aquí puedes manejar el producto encontrado, por ejemplo, guardarlo en el estado o pasarlo a otro componente
-    } catch (error) {
-      console.error('Error al buscar el producto:', error);
-    }
-  };
-
   return (
     <Box my={4}>
       <TextField

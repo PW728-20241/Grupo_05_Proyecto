@@ -45,7 +45,11 @@ const ResultadoBusqueda = () => {
         setOrdenarPor(event.target.value);
     };
 
-    const productosOrdenados = productos.slice().sort((a, b) => {
+    const productosFiltrados = productos.filter(producto => {
+        return producto.title.toLowerCase().includes(query.toLowerCase());
+    });
+
+    const productosOrdenados = productosFiltrados.slice().sort((a, b) => {
         if (ordenarPor === 'Precio') {
             return a.price - b.price;
         } else if (ordenarPor === 'Nombre') {

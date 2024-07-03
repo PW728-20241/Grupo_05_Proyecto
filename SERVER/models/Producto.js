@@ -1,34 +1,48 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../database/database";
+import { sequelize } from "../database/database.js";
 
 export const Producto = sequelize.define(
     "Producto", {
-        // nombre_del_atributo : {configuracion del atributo}
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        detalle: {
+        nombre: {
             type: DataTypes.STRING
         },
-        serie: {
+        editor: {
             type: DataTypes.STRING
         },
         precio: {
-            type: DataTypes.STRING
+            type: DataTypes.FLOAT
         },
         fechaRegistro: {
             type: DataTypes.STRING
         },
         stock: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
         estado: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
+            type: DataTypes.STRING
+        },
+        imageUrl: {
+            type: DataTypes.STRING
+        },
+        categoria: {
+            type: DataTypes.STRING
+        },
+        nuevo: {
+            type: DataTypes.BOOLEAN 
+        },
+        descripcion: {
+            type: DataTypes.STRING 
+        },
+        caracteristicas: {
+             type: DataTypes.ARRAY(DataTypes.STRING) 
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false  
     }
 );

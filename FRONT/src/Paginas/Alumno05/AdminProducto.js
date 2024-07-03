@@ -4,13 +4,13 @@ import Header from '../../Componentes/Header2';
 import Footer from '../../Componentes/Footer';
 import BarLateral from '../../Componentes/BarraLateral2';
 import ContenidoTabla from './ContenidoTablaProd';
-
+import { Link as RouterLink } from 'react-router-dom';
 
 const AdminProducto = () => {
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
-    async function buscraProducto(query = "") {
+    
+    async function buscarProducto(query = "") {
         const URL_base = "http://localhost:3100/productos";
         const url = query ? `${URL_base}-url?id=${query}&nombre=${query}&editor=${query}&estado=${query}` : URL_base;
         
@@ -28,11 +28,11 @@ const AdminProducto = () => {
     }
 
     useEffect(() => {
-        buscraProducto();
+        buscarProducto();
     }, []);
 
     const handleSearch = () => {
-        buscraProducto(searchQuery);
+        buscarProducto(searchQuery);
     };
 
     return (
@@ -44,7 +44,7 @@ const AdminProducto = () => {
                 <Container component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                         <Typography variant="h4" style={{ fontWeight: 'bold' }}>Productos</Typography>
-                        <Button variant="contained" component="label" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
+                        <Button component={RouterLink} to={`/AgregarProducto`} variant="contained" style={{ backgroundColor: '#FFEB3B', color: 'black', fontWeight: 'bold' }}>
                             Agregar Producto
                         </Button>
                     </Box>

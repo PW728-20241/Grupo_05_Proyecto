@@ -12,9 +12,8 @@ const Subrayado = styled(RouterLink)(({ theme }) => ({
     textDecoration: 'underline',
   },
 }));
-function NuevaSeccion(props) {
-  const { nuevos } = props;
 
+function NuevaSeccion({ nuevos }) {
   return (
     <Box id="nuevos" mt={4} mb={2}>
       <Typography variant="h6" gutterBottom>Nuevos</Typography>
@@ -42,13 +41,14 @@ function NuevaSeccion(props) {
       </Grid>
     </Box>
   );
-};
+}
 
 NuevaSeccion.propTypes = {
   nuevos: PropTypes.arrayOf(
     PropTypes.shape({
       imageUrl: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
+      nombre: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
     })
   ).isRequired,
 };

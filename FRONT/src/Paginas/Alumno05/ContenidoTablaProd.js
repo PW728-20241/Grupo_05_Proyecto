@@ -6,7 +6,16 @@ function AgregarFila(props) {
     const { arreglo_general } = props;
     async function eliminarProducto()
     {
-        
+        const respuesta = await fetch(`http://localhost:3100/productos/${arreglo_general.id}`,{method:'DELETE'})
+        if(respuesta.status==200)
+            {
+              alert("Producto eliminado con exito");
+            }
+            else
+            {
+              alert("No se ha podido eliminar el producto");
+            }
+          
     }
     return (
         <TableRow >
@@ -22,7 +31,7 @@ function AgregarFila(props) {
                     Ver
                 </Button>
                 <Button onClick={eliminarProducto} variant="text" size="small" style={{ fontWeight: 'bold', color: '#CC0000' }}>
-                    Desactivar
+                    Eliminar
                 </Button>
             </TableCell>
         </TableRow>
