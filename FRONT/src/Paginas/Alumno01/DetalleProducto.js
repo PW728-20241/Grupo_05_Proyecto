@@ -18,6 +18,7 @@ const DetalleProducto = () => {
           throw new Error('Error al obtener los datos del producto');
         }
         const data = await response.json();
+        // Asegúrate de actualizar imageUrl con la ruta completa del servidor si no lo has hecho ya
         setProduct({ ...data, imageUrl: `http://localhost:3100${data.imageUrl}` });
       } catch (error) {
         console.error('Error:', error);
@@ -43,6 +44,9 @@ const DetalleProducto = () => {
       </>
     );
   }
+
+  // Verifica que product.caracteristicas sea un array antes de usar map
+  const caracteristicasList = Array.isArray(product.caracteristicas) ? product.caracteristicas : [];
 
   return (
     <>
@@ -100,7 +104,7 @@ const DetalleProducto = () => {
         <Box mt={4} mb={4} bgcolor="grey.300" p={2} borderRadius={3}>
           <Typography variant="h6">Características del Producto:</Typography>
           <ul>
-            {product.caracteristicas?.map((feature, index) => (
+            {caracteristicasList.map((feature, index) => (
               <li key={index}>
                 <Typography variant="body1">{feature}</Typography>
               </li>

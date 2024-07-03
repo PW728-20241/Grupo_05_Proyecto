@@ -3,7 +3,6 @@ import { sequelize } from "../database/database.js";
 
 export const Producto = sequelize.define(
     "Producto", {
-        // nombre_del_atributo : {configuracion del atributo}
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -30,15 +29,20 @@ export const Producto = sequelize.define(
         imageUrl: {
             type: DataTypes.STRING
         },
+        categoria: {
+            type: DataTypes.STRING
+        },
+        nuevo: {
+            type: DataTypes.BOOLEAN 
+        },
         descripcion: {
-            type: DataTypes.TEXT,
-            
+            type: DataTypes.STRING 
         },
         caracteristicas: {
-            type: DataTypes.STRING ,
-            
+             type: DataTypes.ARRAY(DataTypes.STRING) 
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false  
     }
 );

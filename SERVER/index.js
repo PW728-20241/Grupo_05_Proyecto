@@ -3,10 +3,11 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { faker } from '@faker-js/faker';
 
-//import { sequelize } from "./database/database.js";
+import { sequelize } from "./database/database.js";
 //import { Usuario } from "./models/Usuario";
 //import { Orden } from "./models/Orden";
-//import { Producto } from "./models/Producto.js";
+import { Producto } from "./models/Producto.js";
+import { Sequelize } from "sequelize";
 //import { Serie } from "./models/Serie";
 
 
@@ -40,7 +41,7 @@ async function verificacionConexion(){
 -----------------------------------------------------
 */
 
-function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUrl, categoria, nuevo) {
+/*function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUrl, categoria, nuevo) {
     return {
         id: id,
         nombre: nombre,
@@ -55,9 +56,9 @@ function crearProducto(id, nombre, precio, editor, fechaRegistro, stock, imageUr
         descripcion: faker.commerce.productDescription(),
         caracteristicas: Array.from({ length: 5 }, () => faker.commerce.productMaterial())
     };
-}
+}*/
 
-const productos = [
+/*const productos = [
     crearProducto(1, "Assassin's Creed II", 60.00, "Ubisoft", "2024-06-25", 10, "/images/ezio.jpeg", "Aventura", false),
     crearProducto(2, "FIFA 2022", 49.99, "EA Sports", "2024-06-25", 15, "/images/FIFA_22.webp", "Deportes", false),
     crearProducto(3, "God of War", 59.99, "Sony", "2024-06-25", 5, "/images/god.avif", "Acción", false),
@@ -83,12 +84,12 @@ const productos = [
     crearProducto(19, "Colección de Items 1: Juegos para regresar al colegio", 29.99, "Various", "2024-06-25", 27, "/images/casa.jpeg", "Colección", false),
     crearProducto(20, "Colección de Items 2: Juegos para la casa", 19.99, "Various", "2024-06-25", 35, "/images/colegio.jpeg", "Colección", false),
     crearProducto(21, "Colección de Items 3: Juegos para los pequeños", 24.99, "Various", "2024-06-25", 42, "/images/niños.webp", "Colección", false)
-];
+];*/
 
 
-app.get('/contenido', function(req, res){
+/*app.get('/contenido', function(req, res){
     res.json(productos);
-});
+});*/
 
 app.get("/productos", async function(req,res){
     const listaProducto = await Producto.findAll();
@@ -96,57 +97,36 @@ app.get("/productos", async function(req,res){
 
 });
 
-/*app.post('/productos1', async function(req, res){
+app.post('/productos1', async function(req, res) {
     const data = req.body;
 
-    if(data.nombre&&data.editor&&data.precio&&data.fechaRegistro&&data.stock&&data.estado&&data.imageUrl&&data.descripcion&&data.caracteristicas){
-        const productCreado = await Producto.create({
-            nombre:data.nombre,
-            editor:data.editor,
-            precio:data.precio,
-            fechaRegistro:data.fechaRegistro,
-            stock:data.stock,
-            estado:data.estado,
-            imageUrl:data.imageUrl,
-            descripcion:data.descripcion,
-            caracteristicas:data.caracteristicas
-
-        });
-        res.status(201).json(productCreado);
+    if (Array.isArray(data) && data.every(product => 
+        product.nombre && 
+        product.editor && 
+        product.precio && 
+        product.fechaRegistro && 
+        product.stock && 
+        product.estado && 
+        product.imageUrl && 
+        product.descripcion && 
+        product.caracteristicas && 
+        product.categoria && 
+        product.nuevo
+    )) {
+        try {
+            const productosCreados = await Producto.bulkCreate(data);
+            res.status(201).json(productosCreados);
+        } catch (error) {
+            console.error("Error interno al crear los productos:", error);
+            res.status(500).send("Error interno al crear los productos");
         }
-        else{
-            res.status(400).send("Faltan datos");
-        }
-    
-});*/
-
-/*app.post('/productos1', async function(req, res) {
-    try {
-        const productosCreados = await Promise.all(arreglo_general.map(async (producto) => {
-            const productCreado = await Producto.create({
-                nombre: producto.nombre,
-                editor: producto.editor,
-                precio: producto.precio,
-                fechaRegistro: producto.fechaRegistro,
-                stock: producto.stock,
-                estado: producto.estado,
-                imageUrl: producto.imageUrl,
-                descripcion: producto.descripcion,
-                caracteristicas: producto.caracteristicas
-            });
-            return productCreado;
-        }));
-
-        res.status(201).json(productosCreados);
-    } catch (error) {
-        console.error("Error interno al crear los productos:", error);
-        res.status(500).send("Error interno al crear los productos");
+    } else {
+        res.status(400).send("Faltan datos");
     }
-});*/
+});
 
 
-
-app.get('/producto/id/:id', function(req, res) {
+/*app.get('/producto/id/:id', function(req, res) {
     const id = parseInt(req.params.id, 10);
     const producto = productos.find(p => p.id === id);
     if (producto) {
@@ -154,9 +134,19 @@ app.get('/producto/id/:id', function(req, res) {
     } else {
         res.status(404).json({ error: "Producto no encontrado" });
     }
+});*/
+
+app.get('/producto/id/:id', async function(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const producto = await Producto.findByPk(id);
+    if (producto) {
+        res.json(producto);
+    } else {
+        res.status(404).json({ error: "Producto no encontrado" });
+    }
 });
 
-app.get('/producto/nombre/:nombre', function(req, res){
+/*app.get('/producto/nombre/:nombre', function(req, res){
     const nombre = req.params.nombre.toLowerCase();
     const producto = productos.find(pub => pub.nombre.toLowerCase() === nombre);
     if (producto) {
@@ -164,15 +154,49 @@ app.get('/producto/nombre/:nombre', function(req, res){
     } else {
         res.status(404).send("Producto no encontrado");
     }
+});*/
+
+app.get('/producto/nombre/:nombre', async function(req, res){
+    const nombre = req.params.nombre.toLowerCase();
+    const producto = await Producto.findOne({
+        where: {
+            nombre: nombre
+        }
+    });
+    if (producto) {
+        res.json(producto);
+    } else {
+        res.status(404).send("Producto no encontrado");
+    }
 });
 
-app.get('/buscar', function(req, res) {
+/*app.get('/buscar', function(req, res) {
     const query = req.query.query.toLowerCase();
     const resultados = productos.filter(producto => 
         producto.nombre.toLowerCase().includes(query)
     );
     res.json(resultados);
+});*/
+
+app.get('/buscar', async function(req, res) {
+
+    const query = req.query.query.toLowerCase();   
+    const resultados = await Producto.findAll({
+            where: {
+                nombre: {
+                    [Sequelize.Op.iLike]: `%${query}%`  // Case-insensitive search
+                }
+            }
+        });
+        
+        if (resultados.length > 0) {
+            res.json(resultados);
+        } else {
+            res.status(404).send("No se encontraron productos que coincidan con la búsqueda.");
+        }
+    
 });
+
 /*
 -----------------------------------------------------
 ...................ALUMNO 5..........................
@@ -204,7 +228,7 @@ app.get("/productos-url",function(req,res)
         res.status(404).send("Producto no encontrado");
     }
 });
-app.get("/productos",function(req,res){
+app.get("/productos5",function(req,res){
     res.json(arreglo_general);
 });
 
@@ -437,5 +461,5 @@ app.get('/ordenes-url',function(req,res){
 
 app.listen(port,function(){
     console.log("Servidor escuchando en el puerto "+port);
-    //verificacionConexion();
+    verificacionConexion();
 });
