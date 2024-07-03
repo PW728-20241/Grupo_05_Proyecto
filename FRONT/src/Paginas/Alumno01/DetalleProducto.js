@@ -3,10 +3,12 @@ import Header1 from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
 import CantidadProducto from '../Alumno01/DETALLE/Cantidad';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import RecommendedItems from '../Alumno02/componentes/recomendacion';  
 
 const DetalleProducto = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [cantidad, setCantidad] = useState(1);
 
@@ -25,7 +27,13 @@ const DetalleProducto = () => {
     }
     fetchProduct();
   }, [id]);
-
+  
+  const handleAddToCart = () => {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    cartItems.push({ ...product, cantidad });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    navigate('/carrito');
+  };
   const aumentarCantidad = () => setCantidad(cantidad + 1);
   const disminuirCantidad = () => cantidad > 1 && setCantidad(cantidad - 1);
 
@@ -75,7 +83,7 @@ const DetalleProducto = () => {
                   <Typography variant="h6">DISPONIBLE</Typography>
                 </Box>
                 <Typography variant="h4" color="black" fontWeight="bold">S/{product.precio.toFixed(2)}</Typography>
-                <Button variant="contained" style={{ marginTop: 8, backgroundColor: '#fbbd08', color: '#ffffff' }}>
+                <Button variant="contained" style={{ marginTop: 8, backgroundColor: '#fbbd08', color: '#ffffff' }} onClick={handleAddToCart}>
                   AÑADIR AL CARRITO
                 </Button>
                 <Box mt={2} />
@@ -107,6 +115,7 @@ const DetalleProducto = () => {
             ))}
           </ul>
         </Box>
+        <RecommendedItems />
       </Container>
       <Footer />
     </>

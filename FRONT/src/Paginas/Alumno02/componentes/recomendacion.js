@@ -1,0 +1,54 @@
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Grid, Card, CardMedia, CardContent, Button } from '@mui/material';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+function RecommendedItems() {
+  const [recommendedItems, setRecommendedItems] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchRandomItems() {
+      try {
+        const response = await axios.get('http://localhost:3100/productos/random');
+        setRecommendedItems(response.data);
+      } catch (error) {
+        console.error("Error fetching random items:", error);
+      }
+    }
+
+    fetchRandomItems();
+  }, []);
+
+  const handleLearnMore = (id) => {
+    navigate(`/detalle/${id}`);
+  };
+
+  return (
+    <Box sx={{ mt: 4 }}>
+      <Typography variant="h6" sx={{ mb: 2 }}>También te podría interesar...</Typography>
+      <Grid container spacing={2}>
+        {recommendedItems.map(item => (
+          <Grid item xs={12} sm={6} md={2.4} key={item.id}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={item.imageUrl}
+                alt={item.name}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h6" component="div">
+                  {item.nombre}
+                </Typography>
+                <Button size="small" onClick={() => handleLearnMore(item.id)}>Learn More</Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
+
+export default RecommendedItems;

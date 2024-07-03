@@ -9,7 +9,14 @@ import ListaUsuariosAdmin from './Paginas/Alumno06/ListaUsuariosAdmin';
 import ListaOrdenesAdmin from './Paginas/Alumno06/ListaOrdenesAdmin';
 import DetalleUsuarioAdmin from './Paginas/Alumno06/DetalleUsuarioAdmin';
 import DetalleOrdenAdmin from './Paginas/Alumno06/DetalleOrdenAdmin';
-
+import CreateSerie from './Paginas/Alumno04/AdminCrearSeries';
+import SeriesDetail from './Paginas/Alumno04/AdminActualizarSerie';
+import SeriesTable from './Paginas/Alumno04/ListadoSeriesAdmin';
+import DetalleOrden from './Paginas/Alumno04/DetalleOrdenUsuario';
+import DetalleUsuario from './Paginas/Alumno04/ConfigDRU';
+import CambiarContraseña from './Paginas/Alumno04/cambiarcontraof';
+import ThankYouPage from './Paginas/Alumno02/graciascompra';
+import CartPage from './Paginas/Alumno02/PaginaCarrito';
 
 function App (){
   return (
@@ -25,7 +32,16 @@ function App (){
               <Route path="/usuarios/:id" element={<DetalleUsuarioAdmin/>}/>
               <Route path='/ListaOrdenesAdmin' element={<ListaOrdenesAdmin/>}/> 
               <Route path='/DetalleUsuarioAdmin' element={<DetalleUsuarioAdmin/>}/> 
-              <Route path='/DetalleOrdenAdmin' element={<DetalleOrdenAdmin/>}/>              
+              <Route path='/DetalleOrdenAdmin' element={<DetalleOrdenAdmin/>}/>
+              <Route path='/ListaSeries' element={<SeriesTable/>}/>
+              <Route path='/ver/serie/:id' element={<SeriesDetail/>}/>
+              <Route path='/crear-serie' element={<CreateSerie/>}/>
+              <Route path='/detalleorden' element={<DetalleOrden/>}/>
+              <Route path='/detalleusuario' element={<DetalleUsuario/>}/>
+              <Route path='/cambiarcontra' element={<CambiarContraseña/>}/>
+              <Route path='/carrito' element={<CartPage/>}/>
+              <Route path='/graciascompra' element={<ThankYouPage/>}/>
+              <Route path='/carritocompra' element={<CartPage/>}/>
           </Routes>
      </Router>
   );

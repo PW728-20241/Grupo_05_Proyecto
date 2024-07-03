@@ -162,6 +162,11 @@ app.get("/productos",function(req,res){
     res.json(arreglo_general);
 });
 
+app.get("/productos/random", function (req, res) {
+    const randomItems = arreglo_general.sort(() => 0.5 - Math.random()).slice(0, 5);
+    res.json(randomItems);
+});
+
 app.post("/productos",function(req,res)
 {
     const data=req.body;
@@ -375,7 +380,128 @@ app.get('/ordenes-url',function(req,res){
         res.status(404).send("Orden no encontrado");
     }
 });
+function crearSeries(id, nombre, descripcion, fechaCreacion, productos) {
+    return {
+        id: id,
+        nombre: nombre,
+        descripcion: descripcion,
+        fechaCreacion: fechaCreacion,
+        nroproductos: productos.length,
+        productos: productos
+    };
+}
 
+const series = [
+    crearSeries(1, "Mortal Kombat", "Colección de la serie de MK", "11/02/2022", ["Mortal Kombat"]),
+    crearSeries(2, "Grand Theft Auto", "Colección del GTA", "1/07/2024", ["Grand Theft Auto V"])
+];
+
+// Endpoint para obtener todas las series con sus productos
+app.get("/series", (req, res) => {
+    const seriesResponse = series.map(serie => ({
+        id: serie.id,
+        nombre: serie.nombre,
+        descripcion: serie.descripcion,
+        fechaCreacion: serie.fechaCreacion,
+        nroproductos: serie.productos.length
+    }));
+    res.json(seriesResponse);
+});
+
+app.get('/series/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const serie = series.find(s => s.id === id);
+    if (serie) {
+        res.json(serie);
+    } else {
+        res.status(404).send("Serie no encontrada");
+    }
+});
+
+app.put('/series/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const serie = series.find(s => s.id === id);
+    if (serie) {
+        Object.assign(serie, req.body);
+        res.json(serie);
+    } else {
+        res.status(404).send("Serie no encontrada");
+    }
+});
+app.post('/series', (req, res) => {
+    const nuevaSerie = req.body;
+    nuevaSerie.id = series.length + 1;
+    nuevaSerie.nroproductos = nuevaSerie.productos.length;
+    series.push(nuevaSerie);
+    res.json(nuevaSerie);
+});
+
+// Datos en memoria para el ejemplo
+let carrito = [];
+let guardadosParaDespues = [];
+
+// Obtener el carrito de compras
+app.get('/carrito', (req, res) => {
+  res.json(carrito);
+});
+
+// Añadir producto al carrito de compras
+app.post('/carrito', (req, res) => {
+  const producto = req.body;
+  carrito.push(producto);
+  res.json(carrito);
+});
+
+// Eliminar producto del carrito de compras
+app.delete('/carrito/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  carrito = carrito.filter(producto => producto.id !== id);
+  res.json(carrito);
+});
+
+// Mover producto a guardados para después
+app.post('/guardarParaDespues', (req, res) => {
+    const producto = req.body;
+    guardadosParaDespues.push(producto);
+    carrito = carrito.filter(p => p.id !== producto.id);
+    res.json({ carrito, guardadosParaDespues });
+  });
+  
+  // Obtener los guardados para después
+  app.get('/guardadosParaDespues', (req, res) => {
+    res.json(guardadosParaDespues);
+  });
+  
+  // Mover producto del guardado para después al carrito
+  app.post('/moverAlCarrito', (req, res) => {
+    const producto = req.body;
+    carrito.push(producto);
+    guardadosParaDespues = guardadosParaDespues.filter(p => p.id !== producto.id);
+    res.json({ carrito, guardadosParaDespues });
+  });
+
+  const ordenes1 = [];
+
+  app.get('/productos', (req, res) => {
+    res.json(productos);
+  });
+  
+  app.get('/producto/id/:id', (req, res) => {
+    const { id } = req.params;
+    const producto = productos.find(p => p.id == id);
+    if (producto) {
+      res.json(producto);
+    } else {
+      res.status(404).send('Producto no encontrado');
+    }
+  });
+  
+  app.post('/ordenes', (req, res) => {
+    const nuevaOrden = { id: uuidv4(), ...req.body };
+    ordenes.push(nuevaOrden);
+    res.json(nuevaOrden);
+  });
+  
 /**ENDPOINTS PARA LA BASE DE DATOS EN POSTGRES */
 
 /*async function verificacionConexion() {
