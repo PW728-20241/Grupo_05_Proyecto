@@ -99,26 +99,27 @@ app.get("/productos", async function(req,res){
 });
 
 // Endpoint para crear un nuevo producto
-app.post('/productos', async (req, res) => {
-    const { nombre, descripcion, caracteristicas, marca, serie, precio, stock, tipo, imageUrl } = req.body;
+app.post('/productos', async function(req, res) {
+    const data = req.body;
+    //if(data.nombre && data.descripcion && data.)
+});
 
-    try {
-        const nuevoProducto = await Producto.create({
-            nombre,
-            descripcion,
-            caracteristicas: caracteristicas ? caracteristicas.split(',') : [],
-            marca,
-            serie,
-            precio,
-            stock,
-            tipo,
-            imageUrl
-        });
-        res.json(nuevoProducto);
-    } catch (error) {
-        console.error('Error al crear el producto:', error);
-        res.status(500).json({ error: 'No se pudo crear el producto' });
+app.delete('/productos/:id',async function(req,res)
+{
+    const id = req.params.id;
+    try{
+        await Producto.destroy({
+            where:{
+                id:id
+            }
+        })
+        res.send("Producto eliminado");
     }
+    catch(error){
+        console.log("Ocurrio un error: ",error);
+        res.status(400).send("Ocurrio un error");
+    }
+    
 });
 
 /*app.get('/producto/id/:id', function(req, res) {
@@ -164,6 +165,37 @@ app.get('/producto/nombre/:nombre', async function(req, res){
         res.status(404).send("Producto no encontrado");
     }
 });
+
+app.get('/producto/id/:id', async function(req, res) {
+    const id = parseInt(req.params.id, 10);
+    const producto = await Producto.findByPk(id);
+    if (producto) {
+        res.json(producto);
+    } else {
+        res.status(404).json({ error: "Producto no encontrado" });
+    }
+});
+
+app.put("/producto/:id", async function(req,res)
+{
+    const id = req.params.id;
+    const data = req.body;
+    if(data.nombre){
+        const productoModificado = await Producto.update({
+            nombre: data.nombre
+        },{
+            where:{
+                id:id
+            }
+        })
+    }
+    else
+    {
+        res.status(400).send('No se encuentra el producto');
+    }
+    
+});
+
 
 /*app.get('/buscar', function(req, res) {
     const query = req.query.query.toLowerCase();

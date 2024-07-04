@@ -73,7 +73,7 @@ const AdminProducto = () => {
                             </TableHead>
                             <TableBody>
                                 {data.length > 0 ? data.filter(producto => producto.estado !== 'Eliminado').map((producto, index) => (
-                                    <ContenidoTabla key={index} arreglo_general={producto}/>
+                                    <ContenidoTabla key={index} producto={producto}/>
                                 )) : (
                                     <TableRow>
                                         <TableCell colSpan={8} style={{ textAlign: 'center' }}>No hay datos disponibles</TableCell>
