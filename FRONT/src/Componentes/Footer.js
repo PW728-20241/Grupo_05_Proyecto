@@ -76,13 +76,13 @@ const Footer = () => {
         <Titulo_Columnas variant="h6" gutterBottom>
           Cuenta
         </Titulo_Columnas>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/iniciarsesion" underline="hover">
           Login
         </Subrayado>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/registrar" underline="hover">
           Registro
         </Subrayado>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/carritocompra" underline="hover">
           Carrito
         </Subrayado>
       </Columnas>
@@ -104,28 +104,28 @@ const Footer = () => {
         <Titulo_Columnas variant="h6" gutterBottom>
           Ayuda
         </Titulo_Columnas>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/acercadenosotros" underline="hover">
           Acerca de Nosotros
         </Subrayado>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/politicaenvio" underline="hover">
           Política de Envío
         </Subrayado>
-        <Subrayado href="#" underline="hover">
+        <Subrayado href="/faq" underline="hover">
           FAQ
         </Subrayado>
       </Columnas>
       <Columnas>
         <Box display="flex" justifyContent="center">
-          <IconButton href="#" color="inherit">
+          <IconButton href="https://www.facebook.com" color="inherit">
             <FacebookIcon />
           </IconButton>
-          <IconButton href="#" color="inherit">
+          <IconButton href="https://www.instagram.com" color="inherit">
             <InstagramIcon />
           </IconButton>
-          <IconButton href="#" color="inherit">
+          <IconButton href="https://twitter.com/home" color="inherit">
             <TwitterIcon />
           </IconButton>
-          <IconButton href="#" color="inherit">
+          <IconButton href="https://www.youtube.com" color="inherit">
             <YouTubeIcon />
           </IconButton>
         </Box>

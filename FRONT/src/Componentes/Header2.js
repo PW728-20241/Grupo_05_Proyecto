@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
 import Grow from '@mui/material/Grow';
+import { Link } from 'react-router-dom';
 
 const Barra = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -31,7 +32,7 @@ const Header1 = () => {
         <AppBar position="static" color="default" elevation={4}>
           <Toolbar>
             <Grow in={true} timeout={500}>
-              <Titulo_Boton>
+              <Titulo_Boton component={Link} to="/">
                 ALDO'S MARKET
               </Titulo_Boton>
             </Grow>

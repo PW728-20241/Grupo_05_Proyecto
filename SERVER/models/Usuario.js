@@ -1,31 +1,41 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../database/database";
+// models/Usuario.js
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database/database.js';
 
-export const Usuario = sequelize.define(
-    "Usuario", {
-        // nombre_del_atributo : {configuracion del atributo}
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        nombre: {
-            type: DataTypes.STRING
-        },
-        apellido: {
-            type: DataTypes.STRING
-        },
-        correo: {
-            type: DataTypes.STRING
-        },
-        fechaRegistro: {
-            type: DataTypes.STRING
-        },
-        estado: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
-        }
-    }, {
-        freezeTableName: true
+export const Usuario = sequelize.define('Usuario', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    apellido: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    correo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    fechaRegistro: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    estado: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Activo'
     }
-);
+}, {
+    freezeTableName: true,
+    timestamps: false
+});

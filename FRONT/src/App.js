@@ -11,7 +11,6 @@ import DetalleUsuarioAdmin from './Paginas/Alumno06/DetalleUsuarioAdmin';
 import DetalleOrdenAdmin from './Paginas/Alumno06/DetalleOrdenAdmin';
 import CreateSerie from './Paginas/Alumno04/AdminCrearSeries';
 import SeriesDetail from './Paginas/Alumno04/AdminActualizarSerie';
-import SeriesTable from './Paginas/Alumno04/ListadoSeriesAdmin';
 import DetalleOrden from './Paginas/Alumno04/DetalleOrdenUsuario';
 import DetalleUsuario from './Paginas/Alumno04/ConfigDRU';
 import CambiarContraseña from './Paginas/Alumno04/cambiarcontraof';
@@ -19,6 +18,13 @@ import ThankYouPage from './Paginas/Alumno02/graciascompra';
 import CartPage from './Paginas/Alumno02/PaginaCarrito';
 import CheckoutPage from './Paginas/Alumno02/checkout';
 import Registrar from './Paginas/Alumno03/Registrar';
+import Iniciarsesion from './Paginas/Alumno03/IniciarSesion';
+import RecuperarPassword from './Paginas/Alumno03/RecuperarPassword';
+import ListadoSeries from './Paginas/Alumno04/LSA';
+import AcercaDeNosotros from './Componentes/AcercadeNosotros';
+import PoliticaDeEnvio from './Componentes/Politicaenvio';
+import FAQ from './Componentes/FAQ';
+import Ayuda from './Componentes/ayuda';
 function App (){
   return (
      <Router>
@@ -34,7 +40,7 @@ function App (){
               <Route path='/ListaOrdenesAdmin' element={<ListaOrdenesAdmin/>}/> 
               <Route path='/DetalleUsuarioAdmin' element={<DetalleUsuarioAdmin/>}/> 
               <Route path='/DetalleOrdenAdmin' element={<DetalleOrdenAdmin/>}/>
-              <Route path='/ListaSeries' element={<SeriesTable/>}/>
+              <Route path='/ListaSeries' element={<ListadoSeries/>}/>
               <Route path='/ver/serie/:id' element={<SeriesDetail/>}/>
               <Route path='/crear-serie' element={<CreateSerie/>}/>
               <Route path='/detalleorden' element={<DetalleOrden/>}/>
@@ -45,6 +51,15 @@ function App (){
               <Route path='/carritocompra' element={<CartPage/>}/>
               <Route path='/checkout' element={<CheckoutPage/>}/>
               <Route path='/registrar'element={<Registrar/>}/>
+              <Route path='/iniciarsesion'element={<Iniciarsesion/>}/>
+              <Route path='/RecuperarPassword'element={<RecuperarPassword/>}/>
+
+
+
+              <Route path='/acercadenosotros'element={<AcercaDeNosotros/>}/>
+              <Route path='/politicaenvio'element={<PoliticaDeEnvio/>}/>
+              <Route path='/faq'element={<FAQ/>}/>
+              <Route path='/ayuda' element={<Ayuda/>}/>
           </Routes>
      </Router>
   );

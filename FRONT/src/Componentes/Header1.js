@@ -76,12 +76,12 @@ const Header1 = () => {
                 Ofertas
               </Navegar>
             </Grow>
-            <Box sx={{ flexGrow: 1 }} />
-            <IconButton color="inherit">
+            <Box  sx={{ flexGrow: 1 }} />
+            <IconButton href="/carritocompra" color="inherit">
               <ShoppingCartIcon />
             </IconButton>
-            <Grow in={true} timeout={1300}>
-              <Navegar>
+            <Grow in={true} timeout={1300} >
+              <Navegar href='/ayuda'>
                 Ayuda
               </Navegar>
             </Grow>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
@@ -8,13 +9,13 @@ const Sidebar = () => {
         <ListItem>
           <ListItemText primary="Mi Cuenta" sx={{ textAlign: 'center' }} />
         </ListItem>
-        <ListItem button sx={{ p: 1 }}>
+        <ListItem button component={Link} to="/ordenes" sx={{ p: 1 }}>
           <ListItemText primary="Órdenes Recientes" sx={{ textAlign: 'center' }} />
         </ListItem>
-        <ListItem button sx={{ p: 1 }}>
+        <ListItem button component={Link} to="/detalleusuario" sx={{ p: 1 }} >
           <ListItemText primary="Datos de Registro" sx={{ textAlign: 'center' }} />
         </ListItem>
-        <ListItem button sx={{ p: 1 }}>
+        <ListItem button component={Link} to="/cambiarcontra" sx={{ p: 1 }} >
           <ListItemText primary="Cambiar Password" sx={{ textAlign: 'center' }} />
         </ListItem>
       </List>

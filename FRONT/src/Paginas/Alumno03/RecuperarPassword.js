@@ -3,22 +3,30 @@ import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import Header from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
 
-const usuariosMock = [
-    { correo: 'correo@ejemplo.com', password: 'password123' },
-    { correo: 'correo2@ejemplo.com', password: 'password123' },
-];
-
 const RecuperarPassword = () => {
     const [correo, setCorreo] = useState('');
     const [error, setError] = useState('');
 
-    const manejarRecuperarPassword = (e) => {
+    const manejarRecuperarPassword = async (e) => {
         e.preventDefault();
-        const usuario = usuariosMock.find(user => user.correo === correo);
-        if (usuario) {
-            alert('Correo de recuperación enviado');
-        } else {
-            setError('*Correo no encontrado');
+        try {
+            const response = await fetch('http://localhost:3100/recuperarPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ correo })
+            });
+
+            if (response.ok) {
+                alert('Correo de recuperación enviado');
+            } else {
+                const data = await response.json();
+                setError(data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError('Error en el servidor');
         }
     };
 
@@ -32,7 +40,7 @@ const RecuperarPassword = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: '74.5vh',
-                    backgroundColor: '#fffff',
+                    backgroundColor: '#fff',
                 }}
             >
                 <Box
@@ -53,7 +61,7 @@ const RecuperarPassword = () => {
                         Ingrese su correo para enviar contraseña
                     </Typography>
                     <TextField
-                        label="email"
+                        label="Email"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                         variant="outlined"

@@ -4,7 +4,6 @@ import Footer from '../../Componentes/Footer';
 import CantidadProducto from '../Alumno01/DETALLE/Cantidad';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import RecommendedItems from '../Alumno02/componentes/recomendacion';  
 
 const DetalleProducto = () => {
   const { id } = useParams();
@@ -119,7 +118,6 @@ const DetalleProducto = () => {
             ))}
           </ul>
         </Box>
-        <RecommendedItems />
       </Container>
       <Footer />
     </>

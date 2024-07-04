@@ -2,25 +2,37 @@ import React, { useState } from 'react';
 import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import Header from '../../Componentes/Header1';
 import Footer from '../../Componentes/Footer';
-
-const usuariosMock = [
-    { correo: 'correo@ejemplo.com', password: 'password123' },
-    { correo: 'correo2@ejemplo.com', password: 'password123' },
-];
+import { useNavigate } from 'react-router-dom';
 
 const IniciarSesion = () => {
     const [correo, setCorreo] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const manejarIniciarSesion = (e) => {
+    const manejarIniciarSesion = async (e) => {
         e.preventDefault();
-        const usuario = usuariosMock.find(user => user.correo === correo && user.password === password);
-        if (usuario) {
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-            alert('Inicio de sesión exitoso');
-        } else {
-            setError('*Email o password incorrectos');
+
+        try {
+            const response = await fetch('http://localhost:3100/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ correo, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message);
+                navigate('/'); // Redirige a la página principal u otra página
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError('*Error al intentar iniciar sesión');
         }
     };
 
@@ -55,7 +67,7 @@ const IniciarSesion = () => {
                         Ingreso para clientes registrados
                     </Typography>
                     <TextField
-                        label="email"
+                        label="Email"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                         variant="outlined"
@@ -63,7 +75,7 @@ const IniciarSesion = () => {
                         sx={{ marginBottom: 2 }}
                     />
                     <TextField
-                        label="password"
+                        label="Password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

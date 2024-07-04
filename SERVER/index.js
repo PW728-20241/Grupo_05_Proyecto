@@ -4,9 +4,10 @@ import bodyParser from "body-parser";
 import { faker } from '@faker-js/faker';
 
 import { sequelize } from "./database/database.js";
-//import { Usuario } from "./models/Usuario";
 //import { Orden } from "./models/Orden";
 import { Producto } from "./models/Producto.js";
+import { Usuario } from "./models/Usuario.js";
+
 import { Sequelize } from "sequelize";
 //import { Serie } from "./models/Serie";
 
@@ -97,34 +98,28 @@ app.get("/productos", async function(req,res){
 
 });
 
-app.post('/productos1', async function(req, res) {
-    const data = req.body;
+// Endpoint para crear un nuevo producto
+app.post('/productos', async (req, res) => {
+    const { nombre, descripcion, caracteristicas, marca, serie, precio, stock, tipo, imageUrl } = req.body;
 
-    if (Array.isArray(data) && data.every(product => 
-        product.nombre && 
-        product.editor && 
-        product.precio && 
-        product.fechaRegistro && 
-        product.stock && 
-        product.estado && 
-        product.imageUrl && 
-        product.descripcion && 
-        product.caracteristicas && 
-        product.categoria && 
-        product.nuevo
-    )) {
-        try {
-            const productosCreados = await Producto.bulkCreate(data);
-            res.status(201).json(productosCreados);
-        } catch (error) {
-            console.error("Error interno al crear los productos:", error);
-            res.status(500).send("Error interno al crear los productos");
-        }
-    } else {
-        res.status(400).send("Faltan datos");
+    try {
+        const nuevoProducto = await Producto.create({
+            nombre,
+            descripcion,
+            caracteristicas: caracteristicas ? caracteristicas.split(',') : [],
+            marca,
+            serie,
+            precio,
+            stock,
+            tipo,
+            imageUrl
+        });
+        res.json(nuevoProducto);
+    } catch (error) {
+        console.error('Error al crear el producto:', error);
+        res.status(500).json({ error: 'No se pudo crear el producto' });
     }
 });
-
 
 /*app.get('/producto/id/:id', function(req, res) {
     const id = parseInt(req.params.id, 10);
@@ -301,32 +296,59 @@ app.delete("/productos/:id",function(req,res)
 ...................ALUMNO 6..........................
 -----------------------------------------------------
 */
-function crearUsuario(id, nombre, apellido, correo, password, fechaRegistro, estado) {
-    return {
-        id: id,
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo,
-        password: password,
-        fechaRegistro: fechaRegistro,
-        estado: estado
-    }
-}
-
-const usuarios = [
-    crearUsuario(1, 'Kaoru', 'Mitoma', 'correo@ejemplo.com', 'password1', '11/02/2022', 'Activo'),
-    crearUsuario(2, 'Phill', 'Phoden', 'correo2@ejemplo.com', 'password2', '11/02/2022', 'Activo'),
-    crearUsuario(3, 'Gustavo', 'Gomez', 'correo3@ejemplo.com', 'password3', '11/02/2022', 'Activo'),
-    crearUsuario(4, 'Gianluca', 'Lapadula', 'correo4@ejemplo.com', 'password4', '11/02/2022', 'Activo'),
-];
-
-app.post('/registrar', (req, res) => {
+app.post('/registrar', async (req, res) => {
     const { nombre, apellido, correo, password } = req.body;
-    const nuevoID = usuarios.length + 1;
-    const nuevoUsuario = crearUsuario(nuevoID, nombre, apellido, correo, password, new Date().toISOString().split('T')[0], 'Activo');
-    usuarios.push(nuevoUsuario);
-    res.json(nuevoUsuario);
+
+    try {
+        const nuevoUsuario = await Usuario.create({
+            nombre,
+            apellido,
+            correo,
+            password,
+            fechaRegistro: new Date(),
+            estado: 'Activo'
+        });
+        res.json(nuevoUsuario);
+    } catch (error) {
+        console.error('Error al crear el usuario:', error);
+        res.status(500).json({ error: 'No se pudo crear el usuario' });
+    }
 });
+
+app.post('/login', async (req, res) => {
+    const { correo, password } = req.body;
+
+    try {
+        const usuario = await Usuario.findOne({ where: { correo, password } });
+        if (usuario) {
+            res.json({ message: 'Inicio de sesión exitoso', usuario });
+        } else {
+            res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+        }
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        res.status(500).json({ error: 'No se pudo iniciar sesión' });
+    }
+});
+app.post('/recuperarPassword', async (req, res) => {
+    const { correo } = req.body;
+
+    try {
+        const usuario = await Usuario.findOne({ where: { correo } });
+        if (usuario) {
+            // Aquí puedes agregar lógica para enviar un correo de recuperación
+            res.json({ message: 'Correo de recuperación enviado' });
+        } else {
+            res.status(404).json({ error: 'Correo no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al recuperar contraseña:', error);
+        res.status(500).json({ error: 'No se pudo recuperar la contraseña' });
+    }
+});
+
+
+
 
 app.get('/usuarios',function(req,res){
     res.json(usuarios);

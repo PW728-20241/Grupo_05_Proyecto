@@ -1,21 +1,24 @@
-import React from 'react';
-import { Box, Grid } from '@mui/material';
-import Detalle from './DatosRegistroUsuario';
-import Sidebar from '../../Componentes/BarraLateral1';
-import Footer from '../../Componentes/Footer';
-import Header1 from '../../Componentes/Header2';
+import React from "react";
+import { Box, Grid, CssBaseline, Container } from "@mui/material";
+import Detalle from "./DatosRegistroUsuario";
+import Sidebar from "../../Componentes/BarraLateral1";
+import Footer from "../../Componentes/Footer";
+import Header1 from "../../Componentes/Header2";
 const DetalleUsuario = () => {
-  return (<>
-    <Header1/>
-    <Box sx={{ flexGrow: 2, p: 2}}>
-      <Grid container spacing={4}>
-          <Sidebar />
-        <Grid item xs={12} md={9}>
-          <Detalle />
-        </Grid>
-      </Grid>
-    </Box>
-    <Footer/>
+  return (
+    <>
+      <Header1 />
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <Sidebar />
+        <Container component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Container sx={{ flexGrow: 1 }}>
+            <Detalle />
+          </Container>
+        </Container>
+      </Box>
+      <br />
+      <Footer />
     </>
   );
 };
