@@ -32,4 +32,6 @@ export const Serie = sequelize.define(
         freezeTableName: true,
         timestamps: false  
     }
+
+    
 );
