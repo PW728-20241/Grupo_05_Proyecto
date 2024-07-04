@@ -10,15 +10,14 @@ export const Producto = sequelize.define(
         },
         nombre: {
             type: DataTypes.STRING
-        },
-        serie: {
-            type: DataTypes.STRING
-        },
+        },        
         precio: {
             type: DataTypes.FLOAT
         },
         fechaRegistro: {
-            type: DataTypes.STRING
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
         stock: {
             type: DataTypes.INTEGER

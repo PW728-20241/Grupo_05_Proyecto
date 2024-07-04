@@ -9,20 +9,22 @@ export const Orden = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        fechaOrden: {
-            type: DataTypes.STRING
-        },
         total: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
-        productos: {
-            type: DataTypes.STRING
+        fechaOrden: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
         estado: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true
+            type: DataTypes.STRING
+        },
+        metodoEnvio: {
+            type: DataTypes.STRING,            
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false  
     }
 );

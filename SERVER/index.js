@@ -9,7 +9,7 @@ import { Producto } from "./models/Producto.js";
 import { Usuario } from "./models/Usuario.js";
 
 import { Sequelize } from "sequelize";
-//import { Serie } from "./models/Serie";
+import { Serie } from "./models/Serie.js";
 
 
 const app = express();
@@ -72,7 +72,7 @@ async function verificacionConexion(){
     crearProducto(10, "The Last Of Us", 39.99, "Naughty Dog", "2024-06-25", 14, "/images/lastofus.avif", "Aventura", false),
     crearProducto(11, "Red Dead Redemption 2", 59.99, "Rockstar", "2024-06-25", 22, "/images/red.avif", "Aventura", false),
     crearProducto(12, "Super Mario Maker", 49.99, "Nintendo", "2024-06-25", 7, "/images/Super_Mario_Maker_Artwork.jpg", "Plataformas", false),
-    crearProducto(13, "God of War Ragnarok", 69.99, "Sony", "2024-06-25", 9, "/images/ragna.webp", "Acción", false),
+    crearProducto(13, "God of War PO", 69.99, "Sony", "2024-06-25", 9, "/images/ragna.webp", "Acción", false),
     crearProducto(14, "Uncharted", 39.99, "Naughty Dog", "2024-06-25", 16, "/images/uncharted.jpg", "Aventura", false),
     crearProducto(15, "WWE 2020", 49.99, "2K", "2024-06-25", 11, "/images/WWE_2K2.jpg", "Deportes", false),
 
