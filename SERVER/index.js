@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import { faker } from '@faker-js/faker';
 
 import { sequelize } from "./database/database.js";
-//import { Orden } from "./models/Orden";
+
 import { Producto } from "./models/Producto.js";
 import { Usuario } from "./models/Usuario.js";
 

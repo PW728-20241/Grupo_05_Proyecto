@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/database.js';
-import { Orden } from "./models/Orden.js";
+import { Orden } from "./Orden.js";
 
 export const Producto = sequelize.define(
     "Producto", {
@@ -46,26 +46,3 @@ export const Producto = sequelize.define(
         timestamps: false  
     }
 );
-
-const Producto_Orden = sequelize.define(
-    "Producto_Orden", {
-        cantidad: {
-            type: DataTypes.INTEGER
-        },
-        precio: {
-            type: DataTypes.FLOAT
-        }
-    }, {
-        freezeTableName: true,
-        timestamps: false
-    }
-);
-
-Producto.belongsToMany(Orden, {
-    throug9u8h: Producto_Orden
-});
-
-Orden.belongsToMany(Producto, {
-    through: Producto_Orden
-});
-

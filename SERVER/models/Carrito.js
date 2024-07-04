@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { Producto } from "./models/Producto.js";
+import { Producto } from "./Producto.js";
 
 export const Carrito = sequelize.define(
     "Carrito", {
@@ -36,13 +36,6 @@ const Producto_Carrito = sequelize.define(
     }
 );
 
-Carrito.belongsToMany(Producto, {
-    through: Producto_Carrito
-});
-
-Producto.belongsToMany(Carrito, {
-    through: Producto_Carrito
-});
 
 
 

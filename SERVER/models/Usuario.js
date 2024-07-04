@@ -1,7 +1,7 @@
 // models/Usuario.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/database.js';
-import { Orden } from "./models/Orden.js";
+import { Orden } from './Orden.js';
 
 export const Usuario = sequelize.define('Usuario', {
     id: {
@@ -39,15 +39,4 @@ export const Usuario = sequelize.define('Usuario', {
 }, {
     freezeTableName: true,
     timestamps: false
-});
-
-Usuario.hasMany(Orden,{
-
-    foreignKey: "usuarioID",
-    sourceKey: "id"    
-});
-
-Orden.belongsTo(Usuario,{
-    foreignKey: "usuarioID",
-    targetKey: "id"
 });

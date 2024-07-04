@@ -33,14 +33,3 @@ export const Serie = sequelize.define(
         timestamps: false  
     }
 );
-
-Serie.hasMany(Producto,{
-
-    foreignKey: "serieID",
-    sourceKey: "id"    
-});
-
-Producto.belongsTo(Serie,{
-    foreignKey: "serieID",
-    targetKey: "id"
-});
