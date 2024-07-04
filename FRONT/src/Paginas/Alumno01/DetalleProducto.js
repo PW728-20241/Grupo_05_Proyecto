@@ -61,7 +61,7 @@ const DetalleProducto = () => {
       <Container maxWidth="md">
         <Box my={4}>
           <Typography variant="h4">{product.nombre}</Typography>
-          <Typography variant="subtitle1">Por: {product.editor}</Typography>
+          <Typography variant="subtitle1">Por: {product.serie}</Typography>
         </Box>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>

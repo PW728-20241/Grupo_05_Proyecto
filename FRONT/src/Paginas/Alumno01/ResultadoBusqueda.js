@@ -26,7 +26,7 @@ const ResultadoBusqueda = () => {
                     id: producto.id,
                     title: producto.nombre,
                     price: producto.precio,
-                    brand: producto.editor,
+                    brand: producto.serie,
                     imageUrl: `http://localhost:3100${producto.imageUrl}`,
                     link: `#producto-${index}`
                 }));

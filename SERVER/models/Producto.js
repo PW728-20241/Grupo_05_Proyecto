@@ -11,7 +11,7 @@ export const Producto = sequelize.define(
         nombre: {
             type: DataTypes.STRING
         },
-        editor: {
+        serie: {
             type: DataTypes.STRING
         },
         precio: {
