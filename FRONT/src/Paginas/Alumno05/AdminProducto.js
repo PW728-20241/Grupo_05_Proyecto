@@ -10,18 +10,18 @@ function AdminProducto (){
     const [data, setData] = useState([]);
     const [allData, setAllData] = useState([]);
     const [searchParams, setSearchParams] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [paginaActual, setpaginaActual] = useState(1);
     const productosPorPagina = 5;
 
     const fetchData = async () => {
         try {
             const URL_base = 'http://localhost:3100/';
-            const response = await fetch(URL_base + 'productos');
-            const result = await response.json();
-            setData(result);
-            setAllData(result);
+            const respuesta = await fetch(URL_base + 'productos');
+            const resultado = await respuesta.json();
+            setData(resultado);
+            setAllData(resultado);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('No se encontro data: ', error);
         }
     };
 
@@ -31,33 +31,33 @@ function AdminProducto (){
 
     const filtrarID = async () => {
         if (searchParams.trim() === '') {
-            setData(allData); // Fetch all products if search Params is empty
-            setCurrentPage(1);
+            setData(allData); 
+            setpaginaActual(1);
             return;
         }
         
         try {
             const URL_base = 'http://localhost:3100/';
-            const response = await fetch(`${URL_base}producto/id/${searchParams}`);
-            if (!response.ok) {
+            const respuesta = await fetch(`${URL_base}producto/id/${searchParams}`);
+            if (!respuesta.ok) {
                 throw new Error('Producto no encontrado');
             }
-            const result = await response.json();
-            setData([result]); // Set data to an array with a single product
-            setCurrentPage(1);
+            const resultado = await respuesta.json();
+            setData([resultado]); 
+            setpaginaActual(1);
         } catch (error) {
             console.error('Error fetching product:', error);
-            setData([]); // Clear the data if the product is not found
+            setData([]); 
         }
     };
 
-    // Calculate the products to display on the current page
-    const indexOfLastProduct = currentPage * productosPorPagina;
-    const indexOfFirstProduct = indexOfLastProduct - productosPorPagina;
-    const currentProducts = data.filter(producto => producto.estado !== 'Eliminado').slice(indexOfFirstProduct, indexOfLastProduct);
+    
+    const indexDelUltimoProducto = paginaActual * productosPorPagina;
+    const indexDelPrimerProducto = indexDelUltimoProducto - productosPorPagina;
+    const productosActuales = data.filter(producto => producto.estado !== 'Eliminado').slice(indexDelPrimerProducto, indexDelUltimoProducto);
 
     const handlePageChange = (event, value) => {
-        setCurrentPage(value);
+        setpaginaActual(value);
     };
 
     return (
@@ -75,7 +75,7 @@ function AdminProducto (){
                     </Box>
                     <TextField
                         id="buscarP"
-                        label="Buscar por ID, Nombre o Editor"
+                        label="Buscar por ID"
                         variant="outlined"
                         fullWidth
                         sx={{ mb: 2 }}
@@ -110,7 +110,7 @@ function AdminProducto (){
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {currentProducts.length > 0 ? currentProducts.map((producto, index) => (
+                                {productosActuales.length > 0 ? productosActuales.map((producto, index) => (
                                     <ContenidoTabla key={index} producto={producto}/>
                                 )) : (
                                     <TableRow>
@@ -123,7 +123,7 @@ function AdminProducto (){
                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
                         <Pagination 
                             count={Math.ceil(data.filter(producto => producto.estado !== 'Eliminado').length / productosPorPagina)} 
-                            page={currentPage} 
+                            page={paginaActual} 
                             onChange={handlePageChange} 
                         />
                     </Box>
