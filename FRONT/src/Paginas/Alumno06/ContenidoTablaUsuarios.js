@@ -14,8 +14,8 @@ function RellenarUsuario(props) {
     const handleDesactivarClick = async () => 
     {
         try {
-            const response = await fetch(`http://localhost:3100/usuarios/${usuario.id}`, {
-                method: 'DELETE',
+            const response = await fetch(`http://localhost:3100/usuarios/${usuario.id}/desactivar`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -23,6 +23,8 @@ function RellenarUsuario(props) {
             if (response.status === 200) {
                 alert("Este usuario ha sido desactivado");
                 window.location.reload();
+            } else if (response.status === 404) {
+                alert("Usuario no encontrado");
             } else {
                 alert("Error al desactivar el usuario");
             }
@@ -30,7 +32,6 @@ function RellenarUsuario(props) {
             console.error("Error al desactivar el usuario:", error);
         }
     };
-
 
     return (
         <TableRow>
@@ -41,7 +42,7 @@ function RellenarUsuario(props) {
             <TableCell style={{ textAlign: 'center' }}>{usuario.fechaRegistro}</TableCell>
             <TableCell style={{ textAlign: 'center' }}>{usuario.estado}</TableCell>
             <TableCell style={{ textAlign: 'center' }}>
-            <Button
+                <Button
                     variant="text"
                     size="small"
                     style={{ fontWeight: 'bold', color: 'black' }}
@@ -49,14 +50,16 @@ function RellenarUsuario(props) {
                 >
                     Ver
                 </Button>
-                <Button
-                    variant="text"
-                    size="small"
-                    style={{ fontWeight: 'bold', color: '#CC0000' }}
-                    onClick={handleDesactivarClick}
-                >
-                    Desactivar
-                </Button>
+                {usuario.estado === 'Activo' && (
+                    <Button
+                        variant="text"
+                        size="small"
+                        style={{ fontWeight: 'bold', color: '#CC0000' }}
+                        onClick={handleDesactivarClick}
+                    >
+                        Desactivar
+                    </Button>
+                )}
             </TableCell>
         </TableRow>
     );

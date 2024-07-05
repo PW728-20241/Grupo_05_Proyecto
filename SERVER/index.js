@@ -10,6 +10,7 @@ import { Usuario } from "./models/Usuario.js";
 
 import { Sequelize } from "sequelize";
 import { Serie } from "./models/Serie.js";
+import { Orden } from "./models/Orden.js";
 
 
 const app = express();
@@ -328,6 +329,122 @@ app.delete("/productos/:id",function(req,res)
 ...................ALUMNO 6..........................
 -----------------------------------------------------
 */
+
+app.get('/usuarios', async function(req,res){
+    const usuarios = await Usuario.findAll();
+    res.json(usuarios);
+});
+
+
+app.get('/usuarios-url', async (req, res) => {
+    const { correo, nombre, apellido } = req.query;
+  
+    try {
+      const usuario = await Usuario.findAll({
+        where: {
+          correo: correo,
+          nombre: nombre,
+          apellido: apellido
+        }
+      });
+      if (usuario) {
+        res.json(usuario);
+      } else {
+        res.status(404).send("Usuario no encontrado");
+      }
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      res.status(500).json({ error: 'Error al obtener el usuario' });
+    }
+  });
+
+
+/* ESTO SIRVE PARA QUE DESACTIVES A UN USUARIO PERO USANDO EL PUT*/ 
+app.put("/usuarios/:id/desactivar", async function(req, res) {
+    const { id } = req.params;
+    try {
+      const [updated] = await Usuario.update({ estado: 'Inactivo' }, {
+        where: { id: id }
+      });
+  
+      if (updated) {
+        res.send("Usuario desactivado");
+      } else {
+        res.status(404).send("Usuario no encontrado");
+      }
+    } catch (error) {
+      console.error("Ocurrió un error al desactivar el usuario:", error);
+      res.status(500).send("Ocurrió un error al desactivar el usuario");
+    }
+  });
+
+
+/*
+PARA ELIMINAR UN USUARIO CON DELETE
+app.delete("/usuarios/:id", async function(req, res) {
+    const id = req.params.id;
+    try {
+        await Usuario.destroy({
+            where: {
+                id: id
+            }
+        })
+        res.send("Usuario eliminado");
+    }
+    catch(error) {
+        console.log("Ocurrio error: ", error);
+        res.status(400).send("Ocurrio un error");
+    }
+});
+*/
+/**SOBRE LAS ORDENES DE ACUERDO AL DETALLE DEL USUARIO */
+
+app.get('/usuarios/:id/ordenes', function(req, res) {
+    const usuarioId = parseInt(req.params.id, 10);
+    const ordenesUsuario = ordenes.filter(item => item.usuarioId === usuarioId);
+
+    if (ordenesUsuario.length > 0) {
+        res.json(ordenesUsuario);
+    } else {
+        res.status(404).send("No se encontraron órdenes para este usuario");
+    }
+});
+
+/** NOS MUESTRA TODA LA LISTA DE ORDENES*/
+app.get('/ordenes', async function(req,res){
+    const ordenes = await Orden.findAll();
+        res.json(ordenes);
+});
+
+/**SIRVE PARA BUSCAR UNA ORDEN DE ACUERDO A CIERTOS PARAMETROS **/
+app.get('/ordenes-url', async function(req,res){
+    const {id, usuario} = req.query;
+    try{
+        const orden = await Orden.findAll({
+            where: {
+                id: id,
+                usuario: usuario
+            }
+        });
+        if (orden) {
+            res.json(orden);
+        } else {
+            res.status(404).send("Orden no econtrada");
+        }
+    } catch (error) {
+        res.status(404).send(error, "Error al obtener la orden");
+    }
+    
+});
+
+
+
+/*
+-----------------------------------------------------
+...................ALUMNO 4..........................
+-----------------------------------------------------
+*/
+
 app.post('/registrar', async (req, res) => {
     const { nombre, apellido, correo, password } = req.body;
 
@@ -380,138 +497,6 @@ app.post('/recuperarPassword', async (req, res) => {
 });
 
 
-
-
-app.get('/usuarios',function(req,res){
-    res.json(usuarios);
-});
-
-
-/*SIRVE PARA CONSULTAR A CIERTOS USUARIOS CON CIERTOS FILTROS*/
-app.get('/usuarios-url',function(req,res){
-    const {correo, nombre, apellido} = req.query;
-    let usuarioFiltrado = usuarios;
-    if (correo || nombre || apellido){
-        usuarioFiltrado = usuarioFiltrado.filter((pub)=>{
-            return (
-                (correo && pub.correo.toLowerCase() == correo.toLocaleLowerCase()) ||
-                (nombre && pub.nombre.toLocaleLowerCase() == nombre.toLocaleLowerCase()) ||
-                (apellido && pub.apellido.toLocaleLowerCase() == apellido.toLocaleLowerCase())
-            );
-            })
-    }
-
-    if (usuarioFiltrado.length >0){
-        res.json(usuarioFiltrado);
-    }
-    else{
-        res.status(404).send("Usuario no encontrado mi rey");
-    }
-});
-
-/**SIRVE PARA AÑADIR A UN NUEVO USUARIO */
-
-app.post("/usuarios",function(req,res){
-    const datos = req.body;
-    if(datos && datos.nombre && datos.apellido && datos.correo && datos.fechaRegistro){
-        const nuevoId = datos.length + 1;
-        const nuevoUsuario = crearUsuario(nuevoId,datos.nombre,datos.apellido,datos.correo,datos.fechaRegistro);
-        usuarios.push(nuevoUsuario);
-        res.json(nuevoUsuario);
-    }
-    else{
-        res.status(404).send("Faltan datos");
-    }
-});
-
-app.put("/usuarios/:id",function(req,res){
-    const id = req.params.id;
-    const datos = req.body;
-
-    if(datos && datos.nombre && datos.apellido && datos.correo && datos.fechaRegistro){
-        const usuarioModificar = usuarios.find((pub)=>pub.id == id);
-        if(usuarioModificar){
-            usuarioModificar.nombre = datos.nombre;
-            usuarioModificar.apellido = datos.apellido;
-            usuarioModificar.correo = datos.correo;
-            usuarioModificar.fechaRegistro = datos.fechaRegistro;
-            res.json(usuarioModificar);
-        }
-        else{
-            res.status(404).send("Usuario no encontrado");
-        }
-    }
-    else{
-        res.status(404).send("Faltan completar datos");
-    }
-});
-
-app.delete("usuarios/:id",function(req,res){
-    const id = req.params.id;
-    const usuarioEliminar = usuarios.find((pub)=>pub.id == id);
-    if (usuarioEliminar){
-        usuarioEliminar.estado = "Inactivo";
-        res.json(usuarioEliminar);
-    }
-    else{
-        res.status(404).send("No se encontrado usuario");
-    }
-});
-
-/**SOBRE LAS ORDENES DE ACUERDO AL DETALLE DEL USUARIO */
-
-function crearOrdenes(id,usuarioId,fechaOrden,total,productos,estado){
-    return{
-        id:id,
-        usuarioId:usuarioId,
-        fechaOrden:fechaOrden,
-        total:total,
-        productos:productos,
-        estado:estado
-    }
-};
-
-const ordenes = [
-    crearOrdenes(1,1,"11/03/2024","S/125.00",13,"Pendiente"),
-    crearOrdenes(2,1,"11/04/2024","S/150.00",1,"Por Enviar"),
-    crearOrdenes(3,2,"11/05/2024","S/200.00",5,"Entregado")
-];
-
-app.get('/usuarios/:id/ordenes', function(req, res) {
-    const usuarioId = parseInt(req.params.id, 10);
-    const ordenesUsuario = ordenes.filter(item => item.usuarioId === usuarioId);
-
-    if (ordenesUsuario.length > 0) {
-        res.json(ordenesUsuario);
-    } else {
-        res.status(404).send("No se encontraron órdenes para este usuario");
-    }
-});
-
-app.get('/ordenes',function(req,res){
-    res.json(ordenes);
-});
-
-/**SIRVE PARA VER TODA LA LISTA DE ORDENES **/
-app.get('/ordenes-url',function(req,res){
-    const {id, usuario} = req.query;
-    let ordenFiltrado = ordenes;
-    if (id || usuario){
-        ordenFiltrado = ordenFiltrado.filter((pub)=>{
-            return (
-                (id && pub.id.toLowerCase() == id.toLocaleLowerCase()) ||
-                (usuario && pub.usuarioId.toLocaleLowerCase() == usuario.toLocaleLowerCase())
-            );
-            })
-    }
-
-    if (ordenFiltrado.length >0){
-        res.json(ordenFiltrado);
-    }
-    else{
-        res.status(404).send("Orden no encontrado");
-    }
-});
 function crearSeries(id, nombre, descripcion, fechaCreacion, productos) {
     return {
         id: id,
