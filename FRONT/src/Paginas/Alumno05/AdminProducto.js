@@ -18,10 +18,11 @@ function AdminProducto (){
             const URL_base = 'http://localhost:3100/';
             const respuesta = await fetch(URL_base + 'productos');
             const resultado = await respuesta.json();
-            setData(resultado);
-            setAllData(resultado);
+            const productosOrdenados = resultado.sort((a, b) => a.id - b.id); // Ordenar los productos por id
+            setData(productosOrdenados);
+            setAllData(productosOrdenados);
         } catch (error) {
-            console.error('No se encontro data: ', error);
+            console.error('No se encontró data: ', error);
         }
     };
 
@@ -46,12 +47,11 @@ function AdminProducto (){
             setData([resultado]); 
             setpaginaActual(1);
         } catch (error) {
-            console.error('Error fetching product:', error);
+            console.error('Error al buscar producto:', error);
             setData([]); 
         }
     };
 
-    
     const indexDelUltimoProducto = paginaActual * productosPorPagina;
     const indexDelPrimerProducto = indexDelUltimoProducto - productosPorPagina;
     const productosActuales = data.filter(producto => producto.estado !== 'Eliminado').slice(indexDelPrimerProducto, indexDelUltimoProducto);
