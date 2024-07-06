@@ -8,7 +8,7 @@ import { sequelize } from "./database/database.js";
 import { Producto } from "./models/Producto.js";
 import { Usuario } from "./models/Usuario.js";
 
-import { Sequelize } from "sequelize";
+import { Sequelize, Op} from "sequelize";
 import { Serie } from "./models/Serie.js";
 import { Orden } from "./models/Orden.js";
 
@@ -176,6 +176,34 @@ app.get('/producto/id/:id', async function(req, res) {
         res.status(404).json({ error: "Producto no encontrado" });
     }
 });
+
+
+
+app.get('/usuarios/fechaRegistro/:fechaRegistro', async function(req, res) {
+    const fechaRegistro = req.params.fechaRegistro.substring(0, 10);
+    const fechaInicio = new Date(`${fechaRegistro}T00:00:00.000Z`);
+    const fechaFin = new Date(`${fechaRegistro}T23:59:59.999Z`);
+
+    try {
+        const usuarios = await Usuario.findAll({
+            where: {
+                fechaRegistro: {
+                    [Op.between]: [fechaInicio, fechaFin] // Usa between para abarcar todo el día
+                }
+            }
+        });
+
+        if (usuarios.length > 0) {
+            res.json(usuarios);
+        } else {
+            res.status(404).json({ error: "Usuarios no encontrados" });
+        }
+    } catch (error) {
+        console.error('Error al buscar usuarios:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 
 app.put("/producto/:id", async function(req,res)
 {
